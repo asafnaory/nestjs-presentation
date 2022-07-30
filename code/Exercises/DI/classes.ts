@@ -1,17 +1,17 @@
 import 'reflect-metadata';
-import { Inject, Injectable, Injector } from "../../solutions/DI/di-solution";
+import { Inject, Injectable, Injector } from "./di";
 
 @Injectable('logic')
 class Logic {
     doSomeLogic() {
-        console.log('done logic')
+        // console.log('done logic')
     }
 }
 
 @Injectable('logic2')
 class Logic2 {
     doSomeLogic() {
-        console.log('done some logic2');
+        // console.log('done some logic2');
     }
 }
 
@@ -21,7 +21,7 @@ class Controller {
 
     work(){
         this.logic.doSomeLogic();
-        this.logic2.doSomeLogic();
+        // this.logic2.doSomeLogic();
     }
 }
 
