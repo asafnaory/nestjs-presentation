@@ -20,71 +20,242 @@
 <body>
     <div class="reveal">
         <div class="slides">
-            <section data-background="#007acc">
-                <h2>
-                    Course Prerequisites
-                </h2>
-            </section>
             <section>
-                <h4>The repo</h4>
-                <a href="https://bit.ly/3K5jkH7">https://bit.ly/3K5jkH7</a>
-                <pre><code class="language-bash" data-trim data-noescape>
-                    npm i
-                    npm start
+                <p>What is nestjs?</p>
+                <p>A progressive Node.js framework for building efficient, reliable and scalable server-side applications.</p>
+            </section>
 
-                    goto: http://localhost:8080
-                </code></pre>
-            </section>
-            <section data-background="#007acc">
-                <h4>
-                    The Ecosystem
-                </h4>
-                <div style="display: flex;flex-direction: row;align-items: center;gap: 100px">
-                    <img src="https://nodejs.org/static/images/logo.svg" height="128" />
-                    <svg fill="none" height="128" viewBox="0 0 27 26" width="129" xmlns="http://www.w3.org/2000/svg">
-                        <path clip-rule="evenodd"
-                            d="m.98608 0h24.32332c.5446 0 .9861.436522.9861.975v24.05c0 .5385-.4415.975-.9861.975h-24.32332c-.544597 0-.98608-.4365-.98608-.975v-24.05c0-.538478.441483-.975.98608-.975zm13.63142 13.8324v-2.1324h-9.35841v2.1324h3.34111v9.4946h2.6598v-9.4946zm1.0604 9.2439c.4289.2162.9362.3784 1.5218.4865.5857.1081 1.2029.1622 1.8518.1622.6324 0 1.2331-.0595 1.8023-.1784.5691-.1189 1.0681-.3149 1.497-.5879s.7685-.6297 1.0187-1.0703.3753-.9852.3753-1.6339c0-.4703-.0715-.8824-.2145-1.2365-.1429-.3541-.3491-.669-.6186-.9447-.2694-.2757-.5925-.523-.9692-.7419s-.8014-.4257-1.2743-.6203c-.3465-.1406-.6572-.2771-.9321-.4095-.275-.1324-.5087-.2676-.7011-.4054-.1925-.1379-.3409-.2838-.4454-.4379-.1045-.154-.1567-.3284-.1567-.523 0-.1784.0467-.3392.1402-.4824.0935-.1433.2254-.2663.3959-.369s.3794-.1824.6269-.2392c.2474-.0567.5224-.0851.8248-.0851.22 0 .4523.0162.697.0486.2447.0325.4908.0825.7382.15.2475.0676.4881.1527.7218.2555.2337.1027.4495.2216.6475.3567v-2.4244c-.4015-.1514-.84-.2636-1.3157-.3365-.4756-.073-1.0214-.1095-1.6373-.1095-.6268 0-1.2207.0662-1.7816.1987-.5609.1324-1.0544.3392-1.4806.6203s-.763.6392-1.0104 1.0743c-.2475.4352-.3712.9555-.3712 1.5609 0 .7731.2268 1.4326.6805 1.9785.4537.546 1.1424 1.0082 2.0662 1.3866.363.146.7011.2892 1.0146.4298.3134.1405.5842.2865.8124.4378.2282.1514.4083.3162.5403.4946s.198.3811.198.6082c0 .1676-.0413.323-.1238.4662-.0825.1433-.2076.2676-.3753.373s-.3766.1879-.6268.2473c-.2502.0595-.5431.0892-.8785.0892-.5719 0-1.1383-.0986-1.6992-.2959-.5608-.1973-1.0805-.4933-1.5589-.8879z"
-                            fill="#fff" fill-rule="evenodd"></path>
-                    </svg>
-                    <svg height="128" viewBox="0 0 780 250">
-                        <path fill="#231F20"
-                            d="M240,250h100v-50h100V0H240V250z M340,50h50v100h-50V50z M480,0v200h100V50h50v150h50V50h50v150h50V0H480z M0,200h100V50h50v150h50V0H0V200z">
-                        </path>
-                    </svg>
-                </div>
-            </section>
-            <section data-background="#007acc">
-                <h2><img src="https://nodejs.org/static/images/logo.svg" height="128" /></h2>
-                <p>Runtime for javascript on backend side<br /> (including tooling)</p>
-                <a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a>
+            <section id="fragments">
+                <p>What are we going to learn?</p>
+                <p class="fragment">1. Introduction and philosophy</p>
+                <p class="fragment">3. Fundamentals - General architecture (modules ,Controllers Providers ) </p>
+                <p class="fragment">4. Fundamentals -  Main features (Decorators ,Pipes, Exception, middleware)</p>
+                <p class="fragment">5. Demo : simple CRUD </p>
+                <p class="fragment">6. First exercise </p>
             </section>
             <section>
-                <h2><svg fill="none" height="128" viewBox="0 0 27 26" width="129" xmlns="http://www.w3.org/2000/svg">
-                        <path clip-rule="evenodd"
-                            d="m.98608 0h24.32332c.5446 0 .9861.436522.9861.975v24.05c0 .5385-.4415.975-.9861.975h-24.32332c-.544597 0-.98608-.4365-.98608-.975v-24.05c0-.538478.441483-.975.98608-.975zm13.63142 13.8324v-2.1324h-9.35841v2.1324h3.34111v9.4946h2.6598v-9.4946zm1.0604 9.2439c.4289.2162.9362.3784 1.5218.4865.5857.1081 1.2029.1622 1.8518.1622.6324 0 1.2331-.0595 1.8023-.1784.5691-.1189 1.0681-.3149 1.497-.5879s.7685-.6297 1.0187-1.0703.3753-.9852.3753-1.6339c0-.4703-.0715-.8824-.2145-1.2365-.1429-.3541-.3491-.669-.6186-.9447-.2694-.2757-.5925-.523-.9692-.7419s-.8014-.4257-1.2743-.6203c-.3465-.1406-.6572-.2771-.9321-.4095-.275-.1324-.5087-.2676-.7011-.4054-.1925-.1379-.3409-.2838-.4454-.4379-.1045-.154-.1567-.3284-.1567-.523 0-.1784.0467-.3392.1402-.4824.0935-.1433.2254-.2663.3959-.369s.3794-.1824.6269-.2392c.2474-.0567.5224-.0851.8248-.0851.22 0 .4523.0162.697.0486.2447.0325.4908.0825.7382.15.2475.0676.4881.1527.7218.2555.2337.1027.4495.2216.6475.3567v-2.4244c-.4015-.1514-.84-.2636-1.3157-.3365-.4756-.073-1.0214-.1095-1.6373-.1095-.6268 0-1.2207.0662-1.7816.1987-.5609.1324-1.0544.3392-1.4806.6203s-.763.6392-1.0104 1.0743c-.2475.4352-.3712.9555-.3712 1.5609 0 .7731.2268 1.4326.6805 1.9785.4537.546 1.1424 1.0082 2.0662 1.3866.363.146.7011.2892 1.0146.4298.3134.1405.5842.2865.8124.4378.2282.1514.4083.3162.5403.4946s.198.3811.198.6082c0 .1676-.0413.323-.1238.4662-.0825.1433-.2076.2676-.3753.373s-.3766.1879-.6268.2473c-.2502.0595-.5431.0892-.8785.0892-.5719 0-1.1383-.0986-1.6992-.2959-.5608-.1973-1.0805-.4933-1.5589-.8879z"
-                            fill="#fff" fill-rule="evenodd"></path>
-                    </svg></h2>
-                <p>
-                    Javascript superset, a typesafe alternative.
-                    <a href="https://www.typescriptlang.org/download">https://www.typescriptlang.org/download</a>
-                </p>
+                <img src="../../assets/npm-trends.png" style="height: 650px; width: 1000px;">
+            </section>
+            <section  id="fragments" data-background-color="white" data-background-iframe="https://nestjs.com/" data-background-interactive>
+            </section>
+            <section id="fragments">
+                <p>Why care about NestJS ? </p>
             </section>
             <section>
-                <h2><svg height="128" viewBox="0 0 780 250">
-                        <path fill="#231F20"
-                            d="M240,250h100v-50h100V0H240V250z M340,50h50v100h-50V50z M480,0v200h100V50h50v150h50V50h50v150h50V0H480z M0,200h100V50h50v150h50V0H0V200z">
-                        </path>
-                    </svg></h2>
-                <p>Package manager for nodejs ecosystem</p>
-                <p style="font-style: italic;">Installed with nodejs</p>
+                <p>Typescript</p>
             </section>
             <section>
-                <h2>Initial project initialization</h2>
-                <img src="../../assets/demo_teaser.png" />
+                <p>Dependency Injection</p>
+            </section>
+            <section>
+                <p>Common used features abstractions</p>
+                <p>Rest, GraphQL, websockets, event emmiter and more...</p>
+            </section>
+            <section>
+                <p>Command line interface (CLI)</p>
+            </section>
+            <section>
+                <p>Application architecture</p>
+            </section>
+            <section>
+                <p>Fundamentals</p>
+            </section>
+            <section>
+
+                <section>
+                    <p>Modules</p>
+                </section>
+                <section>
+                    <p>
+                        A module is a class annotated with a @Module() decorator. The @Module() decorator provides metadata that Nest makes use of to organize the application structure.
+                    </p>
+                </section>
+                <section>
+                    <img src="../../assets/modules-nest.png" style="height: 650px; width: 1000px;">
+                </section>
+                <section id="fragments">
+                    <p>Modules</p>
+                    <p class="fragment"> Each application has at least one module, a root module </p>
+                    <p class="fragment"> We want to emphasize that modules are strongly recommended as an effective way to organize your components </p>
+                    <p class="fragment"> for most applications, the resulting architecture will employ multiple modules, each encapsulating a closely related set of capabilities. </p>
+                </section>
+                <section id="fragments">
+                    <p class="fragment"> The @Module() decorator takes a single object whose properties describe the module</p>
+                    <p class="fragment"> providers: the providers that will be instantiated by the Nest injector and that may be shared at least across this module </p>
+                    <p class="fragment"> controllers: the set of controllers defined in this module which have to be instantiated</p>
+                    <p class="fragment"> imports: the list of imported modules that export the providers which are required in this module </p>
+                    <p class="fragment"> exports: the subset of providers that are provided by this module and should be available in other modules which import this module. You can use either the provider itself or just its token (provide value)</p>
+                </section>
+                <section id="fragments">
+                    <p>Type of modules</p>
+                    <p class="fragment">Feature modules</p>
+                    <p class="fragment">Shared modules</p>
+                    <p class="fragment">Module re-exporting</p>
+                    <p class="fragment">Global modules</p>
+                    <p class="fragment">Dynamic modules</p>
+                </section>
+                <section>
+                    <p>Feature modules</p>
+                    <p class="fragment">A feature module simply organizes code relevant for a specific feature, keeping code organized and establishing clear boundaries.</p>
+                    <p class="fragment">This helps us manage complexity and develop with SOLID principles, especially as the size of the application and/or team grow.</p>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape>
+                        import { Module } from '@nestjs/common';
+                        import { CatsController } from './cats.controller';
+                        import { CatsService } from './cats.service';
+                        
+                        @Module({
+                          controllers: [CatsController],
+                          providers: [CatsService],
+                        })
+                        export class CatsModule {}
+                    </code></pre>
+                </section>
+                <section id="fragments">
+                    <p>Shared modules</p>
+                    <p class="fragment">In Nest, modules are singletons by default, and thus you can share the same instance of any provider between multiple modules effortlessly.</p>
+                    <p class="fragment">Every module is automatically a shared module. Once created it can be reused by any module.</p>
+                </section>
+                <section>
+                    <img src="../../assets/shared-module.png" style="height: 500px; width: 1000px;">
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-10 | 8">
+                        import { Module } from '@nestjs/common';
+                        import { CatsController } from './cats.controller';
+                        import { CatsService } from './cats.service';
+                        
+                        @Module({
+                          controllers: [CatsController],
+                          providers: [CatsService],
+                          exports: [CatsService]
+                        })
+                        export class CatsModule {}
+                    </code></pre>
+                </section>
+                <section id="fragments">
+                    <p>Global modules </p>
+                    <p class="fragment">When you want to provide a set of providers which should be available everywhere out-of-the-box (e.g., helpers, database connections, etc.), make the module global with the @Global() decorator. </p>
+                    <p class="fragment">The @Global() decorator makes the module global-scoped. Global modules should be registered only once, generally by the root or core module. In the above example, the CatsService provider will be ubiquitous, and modules that wish to inject the service will not need to import the CatsModule in their imports array </p>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-10 | 5">
+                        import { Module, Global } from '@nestjs/common';
+                        import { CatsController } from './cats.controller';
+                        import { CatsService } from './cats.service';
+                        
+                        @Global()
+                        @Module({
+                          controllers: [CatsController],
+                          providers: [CatsService],
+                          exports: [CatsService],
+                        })
+                        export class CatsModule {}
+                    </code></pre>
+                </section>
+                <section id="fragments">
+                    <p>Dynamic modules</p>
+                    <p class="fragment">This feature enables you to easily create customizable modules that can register and configure providers dynamically. </p>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape>
+                        import { Module, DynamicModule } from '@nestjs/common';
+                        import { createDatabaseProviders } from './database.providers';
+                        import { Connection } from './connection.provider';
+                        
+                        @Module({
+                          providers: [Connection],
+                        })
+                        export class DatabaseModule {
+                          static forRoot(entities = [], options?): DynamicModule {
+                            const providers = createDatabaseProviders(options, entities);
+                            return {
+                              module: DatabaseModule,
+                              providers: providers,
+                              exports: providers,
+                            };
+                          }
+                        }
+                    </code></pre>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <p>Controllers</p>
+                </section>
+                <section id="fragments">
+                    <p>Controllers are responsible for handling incoming requests and returning responses to the client.</p>
+                    <p class="fragment">A controller's purpose is to receive specific requests for the application. The routing mechanism controls which controller receives which requests. Frequently, each controller has more than one route, and different routes can perform different actions.</p>
+                    <p class="fragment">In order to create a basic controller, we use classes and decorators. Decorators associate classes with required metadata and enable Nest to create a routing map (tie requests to the corresponding controllers).</p>
+                </section>
+                <section>
+                        <img src="../../assets/controller.png" style="height: 500px; width: 1000px;">
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-8 | 2 | 4 |5-7">
+                        import { Controller, Get, Req } from '@nestjs/common';
+                        import { Request } from 'express';
+                        
+                        @Controller('cats')
+                        export class CatsController {
+                          @Get()
+                          findAll(@Req() request: Request): string {
+                            return 'This action returns all cats';
+                          }
+                        }
+                    </code></pre>
+                </section>
+                <section>
+                    <img src="../../assets/decorators.png" style="height: 500px; width: 1000px;">
+                </section>
+            </section>
+            <section>
+                <section>
+                    <p>Providers</p>
+                </section>
+                <section>
+                    <p>Providers are a fundamental concept in Nest. Many of the basic Nest classes may be treated as a provider – services, repositories, factories, helpers, and so on. The main idea of a provider is that it can be injected as a dependency; this means objects can create various relationships with each other, and the function of "wiring up" instances of objects can largely be delegated to the Nest runtime system.</p>
+                </section>
+                <section>
+                    <img src="../../assets/providers.png" style="height: 500px; width: 1000px;">
+                </section>
+                <section>
+                    <p>Services</p>
+                </section>
+                <section id="fragments">
+                    <p>A service is the most common use of providers. </p>
+                    <p class="fagment">Every controller has a service</p>
+                    <p class="fagment">All the business logic should be in the service and the controller should stay as lean as possible </p>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape>
+                        import { Injectable } from '@nestjs/common';
+                        import { Cat } from './interfaces/cat.interface';
+                        
+                        @Injectable()
+                        export class CatsService {
+                          private readonly cats: Cat[] = [];
+                        
+                          create(cat: Cat) {
+                            this.cats.push(cat);
+                          }
+                        
+                          findAll(): Cat[] {
+                            return this.cats;
+                          }
+                        }
+                    </code></pre>
+                </section>
+                <section id="fragments">
+                    <p>Dependency Injection</p>
+                    <p class="fragment">
+                        In Nest, thanks to TypeScript capabilities, it's extremely easy to manage dependencies because they are resolved just by type. In the example below, Nest will resolve the catsService by creating and returning an instance of CatsService (or, in the normal case of a singleton, returning the existing instance if it has already been requested elsewhere). This dependency is resolved and passed to your controller's constructor (or assigned to the indicated property)
+                    </p>
+                </section>
             </section>
         </div>
     </div>
-
     <script src="../../dist/reveal.js"></script>
     <script src="../../plugin/notes/notes.js"></script>
     <script src="../../plugin/markdown/markdown.js"></script>
