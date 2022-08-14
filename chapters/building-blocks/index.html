@@ -16,718 +16,122 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>
-						OOP refresher
-				</section>
+				<section> Other Building Blocks </section>
+                <section>
+                    <section>
+                        Middleware
+                    </section>
+                </section> 
+                <section>
+                    <section>
+                        Exception filters
+                    </section>
 					<section>
-							<section>
-								<p> The OOP principles </p>
-								<aside class="notes"> 
-									Class discussion
-								</aside>
-							</section>
-							<section>
-								<p>
-									Encapsulation 
-								</p>
-							</section>
-							<section>
-								<img src="https://m.media-amazon.com/images/I/71FN+ugi1gL._AC_SL1500_.jpg" width="450" height="300">
-								<aside class="notes"> 
-									Encapsulation is achieved when each object keeps its state private, inside a class. 
-									Other objects don’t have direct access to this state. Instead, 
-									they can only call a list of public functions — called methods.
-								</aside>
-							</section>
-							<section>
-								<p> In TypeScript</p>
-							</section>
-							<section>
-								access modifiers - public, private, and protected
-							</section>
-							<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-							class Person {
-								constructor(private name: string, private age: number){}
-							
-								talk() {
-									console.log('bla bla..')
-								}
-								move(){
-									if(this.age < 30) {
-										this.run()
-									}
-									else {
-										this.walk();
-									}
-								}
-							
-								private  walk () {
-									console.log('walking...')
-								}  
-								private  run () {
-									console.log('running...')
-								}  
-							}
-							</script></code></pre>
-							</section>
-							<section>
-								getters and setters
-							</section>
-							<section>
-								<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="17-28">
-									class Person {
-										constructor(private _name: string, private _age: number){}
-									
-										talk() {
-											console.log('bla bla..')
-										}
-										move(){
-											if(this._age < 30) {
-												this.run()
-											}
-											else {
-												this.walk();
-											}
-										}
-									
-									
-									get age (){
-										if(this._age > 18){
-											return 'child';
-										}
-										else {
-											return 'adult'
-										}
-									}
-									
-									set name (name: string) {
-										this._name = name.toUpperCase()
-									}
-									
-									  private  walk () {
-										  console.log('walking...')
-									  }  
-									  private  run () {
-										  console.log('running...')
-									  }  
-									}
-								</script></code></pre>
-								</section>
-						<section> 
-						 <p>
-						 	Abstraction 
-						 </p>
-						</section>
-						<section>
-							<img src="https://m.media-amazon.com/images/I/71FN+ugi1gL._AC_SL1500_.jpg" width="450" height="300">
-							<aside class="notes"> 
-								In object-oriented design, programs are often extremely large. And separate objects communicate with each other a lot. 
-								So maintaining a large codebase like this for years — with changes along the way — is difficult.
-								Abstraction is a concept aiming to ease this problem.
-
-								Applying abstraction means that each object should only expose a high-level mechanism for using it.
-							</aside>
-						</section>
-						<section>
-							<p> In TypeScript</p>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="4-14">
-								class Person {
-									constructor(private name: string, private age: number){}
-								
-									talk() {
-										console.log('bla bla..')
-									}
-									move(){
-										if(this.age < 30) {
-											this.run()
-										}
-										else {
-											this.walk();
-										}
-									}
-								
-									private  walk () {
-										console.log('walking...')
-									}  
-									private  run () {
-										console.log('running...')
-									}  
-								}
-								</script></code></pre>
-						</section>
-						<section> 
-						 <p>
-						 	Inheritance 
-						 </p>
-						 <aside class="notes"> 
-							OK, we saw how encapsulation and abstraction can help us develop and maintain a big codebase.
-
-							But do you know what is another common problem in OOP design?
-							
-							Objects are often very similar. They share common logic. But they’re not entirely the same. Ugh…
-							
-							So how do we reuse the common logic and extract the unique logic into a separate class? One way to achieve this is inheritance.
-							
-							It means that you create a (child) class by deriving from another (parent) class. This way, we form a hierarchy.
-						</aside>
-						</section>
-						<section>
-							<p> In TypeScript</p>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class Adult extends Person {
-									constructor(private adultName: string) {
-										super(adultName, 30);
-									}
-									work() {
-										console.log('working...')
-									}
-								}
-								
-								class Child extends Person {
-									constructor(private childName: string) {
-										super(childName, 10);
-									}
-									play() {
-										console.log('playing...')
-									}
-								}
-								</script></code></pre>
-						</section>
-						<section>
-							<p>
-								The Gang of Four advice to “favor object composition over class inheritance” invites us to think of our objects as a composition of smaller, 
-								loosely coupled objects rather than wholesale inheritance from a monolithic base class.
-							</p>
-						</section>
-						<section>
-							<p>Composition over inheritance</p>
-							<aside class="notes">
-								<p> 1. The fact that JavaScript does not support multiple inheritances is one reason for favoring composition over inheritance in JavaScript. Since you can only extend one class in JavaScript, but if you need multiple features, such as reading and writing character data into a file, you need Reader and Writer functionality. It makes your job simple to have them as private members, and this is called Composition. </p>
-								<p> 2. Composition offers better test-ability of a class than Inheritance. If one class consists of another class, you can easily construct a Mock Object representing a composed class for the sake of testing. This privilege is not given by inheritance.</p>
-								<p>3. Although both Composition and Inheritance allow you to reuse code, one of Inheritance’s disadvantages is that it breaks encapsulation. If the subclass depends on the action of the superclass for its function, it suddenly becomes fragile. When super-class behavior changes, sub-class functionality can be broken without any modification on its part.</p>
-								<p> 4. In the timeless classic Design Patterns, several object-oriented design patterns listed by Gang of Four: Elements of Reusable Object-Oriented Software, favor Composition over Inheritance. Strategy design pattern, where composition and delegation are used to modify the behavior of Context without touching context code, is a classical example of this. Instead of getting it by inheritance, because Context uses composition to carry strategy, it is simple to have a new implementation of strategy at run-time.</p>
-								<p> 5. Another reason why composition is preferred over inheritance is flexibility. If you use Composition, you are flexible enough to replace the better and updated version of the Composed class implementation. One example is the use of the comparator class, which provides features for comparison.</p>
-							</aside>
-						</section>
-						<section id="fragments">
-							<aside class="notes">
-								<p>
-									well actually it is not. if I have a class Person and a class Dog inherit from a class Animal, that makes sence in the real world, but who said we have to develop things that make sense in the real world? 
-									if we create a prson and a dog that both are composed from the calss Animal, that doesnt make sense in the real world, but it can make great programme. 
-								</p>
-								<p>
-									1. great fexibility - can compose a class from more then one other class
-									2. Loose coupling - based on abstractions and not concrete class
-								</p>
-
-							</aside>
-							<p>Inheritance: describe what objects are - "Is a"</p>
-							<p>Composition: describe what objects do - "Has a"</p>
-							<p class="fragment"> is it? </p>
-						</section>
-						<section  data-background-color="white" data-background-iframe="https://en.wikipedia.org/wiki/Composition_over_inheritance" data-background-interactive>
-						</section>
-						<section>
-							<p>Dependency injection</p>
-						<aside class="notes">
-							Dependency injection implements inversion of control through composition, and is often similar to the strategy pattern. While the strategy pattern is intended for dependencies that are interchangeable throughout an object's lifetime, in dependency injection it may be that only a single instance of a dependency is used
-						</aside>
-						</section>
-						<section>
-							<p>
-								Polymorphism 
-							</p>
-							<aside class="notes"> 
-								   Say we have a parent class and a few child classes which inherit from it. 
-								   Sometimes we want to use a collection — for example a list — which contains a mix of all these classes. Or we have a method implemented for the parent class — but we’d like to use it for the children, too.
-								   This can be solved by using polymorphism.
-								   Simply put, polymorphism gives a way to use a class exactly like its parent so there’s no confusion with mixing types. But each child class keeps its own methods as they are.
-							   </aside>
-						</section>
-						<section>
-							<p> In TypeScript </p>
-						</section>
-						<section>
-							<aside class="notes"> 
-								the methods that can be used are only the methods on the parent type
-							</aside>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								const person: Person  = new Adult('Asaf');
-							</script></code></pre>
-						</section>
-						<section>
-							<p>Duck typing?</p>
-						</section>
-						</section>
+						<p>Nest comes with a built-in exceptions layer which is responsible for processing all unhandled exceptions across an application. When an exception is not handled by your application code, it is caught by this layer, which then automatically sends an appropriate user-friendly response.</p>
 					</section>
 					<section>
-					  <section> 
-						 <p>
-							 the SOLID principles 
-						 </p>
-						 <aside class="notes"> 
-							In software engineering, SOLID is a mnemonic acronym for five design principles intended to make software designs more understandable, flexible, and maintainable. The principles are a subset of many principles promoted by American software engineer and instructor Robert C. Martin (Uncle Bob) first introduced in his 2000 paper Design Principles and Design Patterns.
-						</aside>
-						</section>
-					  <section> 
-						  <p> Single-responsibility </p> 
-						  <p>A class (or function ) should have only one reason to change </p>
-						  <img src="../../assets/Single-Responsibility-Principle.png" style="height: 500px; width: 650px;">
-						</section>
-
-						<section>
-							<aside class="notes"> 
-								<p>this class has 2 reason to change: </p>
-								<p>1. trackCalories has change it implementation</p>
-								<p>2. logMessage has change it implementation</p>
-							</aside>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class CalorieTracker {
-									currentCalories = 0;
-									constractor(private maxCalories: number){}
-
-									trackCalories(calorieCount){
-										this.currentCalories += calorieCount;
-										if(this.currentCalories > this.maxCalories){
-											this.logMessage()
-										}
-									}
-									logMessage(){
-										console.log('max calories exceeded')
-									}
-								}
-							</code></pre>
-						</section>
-						<section>
-							<aside class="notes"> 
-								<p>now each one has one reason to change </p>
-								<p>things that are not directly realted should not be affected</p>
-							</aside>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								import logMesasge from './logger.js'
-
-								class CalorieTracker {
-									currentCalories = 0;
-									constractor(private maxCalories: number){}
-
-									trackCalories(calorieCount){
-										this.currentCalories += calorieCount;
-										if(this.currentCalories > this.maxCalories){
-											logMessage('max calories exceeded')
-										}
-									}
-								}
-							</code></pre>
-						</section>
-					  <section> 
-							<p>	Open–closed </p>
-							<p> A class should be open to extensions but close to modifications </p>
-							<img src="../../assets/Open-Closed-Principle.png" style="height: 500px; width: 650px;">
-							<aside class="notes"> 
-								Once you are happy with a class and it passes all UT, it should be close to modifications
-								new fuctionality sould be added in a new class, and it should extend (or use conposition) the other class
-							</aside>
-						</section>
-						<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/FASwdgLgpgTgZgQwMZQAQHMplggNgRQFcoBnCEAezFQG9hUHUIBPABygC5UAiAIwoq4oCMN1QAfHtAAeEbgBpU9RgBNSSGCFbkqXMprDpFwAL4BuUJFiIUqALaFc5VkIDCACwogURUjup0jExsnDwOTlpunt5QCkpBaiQaWv56EAZG8YwU2pRgJGkZANoAuqYWwMAs7Ki+ZHmoALwYWDgExPVUEvaOzlFePh3+lXCEYEj+qKwGEEQgAF4AFACOQ3kFtWtUpQCUtMoMq37rAHRwFDAAosjuiytbYDuNAHyBQYxIVCSCUCe4FOh7scqCdEslclQdgd3iQAO4gCBIW5HTpgE7VKA7N7vd5IBAkNB8ARCETcDjQnE4z75H5-AGLbjpYjcHYWSns1DU75COmA7iIXAEllsjkMXgwYQAaxForxBLCvUiUA8A1iXApotQKP8Jxy-hIZwu1yRdz1eUU4DU0iez32mo5XNp-0BAAMACQ0S1QaSoADUqAAjCYTqgPWaqCYXayNaKTFD7UFxVKZQ78YSZHJUOqEx8vk76dwAIL5WGwLgAfUrVerNeFMY5SYQ0vrJnrQUdPOdDLrQTjpkqXIgWoeGzq-lKTVQRWh2PeGK4RJ+pPk9bBmghYAXAEkSKgROhHAgYKhCATdxikuuhxRCNe4Ex3Gh+NIAPwKaEmFdBWdBedSb1yF+lJrikeQLgAIuomi8GgzA3seiAAG4XAiaAXuCQ5wMIECEBKb5AQwn4zvWf7cOEfTKtEKDvuyIEbguADq7gIEOIC7nBuGoEhKHQKguD7oQCCYPh9bhvkXBFNwABSCCIQgADKGFxNwAAKzAQFQykyXJymuL6vrcGUvYrmUwDTOAsyEAsQKoiQOxAA" data-background-interactive>
-						</section>
-						<section>
-							New requirement: add a range question to the quiz
-							<pre><code class="typescript-language" data-trim data-noescape>
-								{
-									type: "range",
-									description: "what is the speed limit in your city?"
-								}
-							</code></pre>
-							<aside class="notes"> 
-								<p>
-									Most of the people will go and modify the class without a second thought.
-								</p>
-
-								<p>
-									Since you don’t modify existing code you can be assured that it wouldn’t be broken. 
-									It reduces maintenance cost and increases product stability.
-									Open/closed principle is intended to mitigate risk when introducing new functionality. 
-								</p>
-								<p>
-									case "range" : 
-									console.log("Minimum: _______________");
-									console.log("Maximum: _______________");
-									break;
-								</p>
-							</aside>
-						</section>
-						<section>
-								<aside class="notes"> 
-									<p>
-										Close - this class should be closed for modification, so we violated this principle when we changed it 
-									</p>
-	
-									<p>
-										Open -  however we should have the ability to add new things. we should have the ability to add new type.
-									</p>
-
-								</aside>
-						</section>
-						<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/MYGwhgzhAEBCD28QFMwDsCKBXZEAuAlvGtAN4BQ0V0wx+ATlsHvPQBQAOWARiAcNAAmuYPQIdCxAFzQGBNAHMAlKQC+lahzFo82XJLQBhABbx+uNio3VqtNBCTIAdCHgK2AIgCMT6ABVGZA8laxsaOkcXN08AJl8AMTAQCCCQm3V1clBIGABZLBBCDhQTM2BkPXwiEgobOwYmFnYuXn4hETEJapk5RQAaaC0CADcwPGRoeC66HrxtBQBtAF0VdRshnUqDUvMIS1qbPGMCCCcpg1OAM1YAUTBgYzY2c+qB+WEADyUAXgA+A7CtgiKCi7gABgASUjvZAfaAAamgXlUvihL2IqjBSgA3KFoKo0tQMuQsuAoP5YbocFViGRQvU5o1WJweHwBMIIKJxAZZvNVqENlT9NUduU9lZAVR6pFXO4PABBewAd2Q9BkAH1NVrtTrgriwsTSTloAAldAKCrUgx0up0RnMZktNntTmdHmyObyZRqAXaIU0oymXb7PFA+wy6IeXLyDU6uNavWhqXA5yyzy5MAfWPxuOJg3kTLycb0S73CZbaoAl1c6ZoXle31FivEUUWJQyYZmQQFknkS5YNDMaqDP3YAgALzYAEcrdUIDJm2hlkobdQZ8K6E5rvQ7g8nuuAz9-knwuGQWmDwYnByawYcSfL9UnILF63xfrJdLz5G80SQpkGWgR86Ggb5oAWUI0GQJU4EQFB0EXTwAEkYHNAowHoaAsBSGA8AATw4DpuUmLA8EmS5oCOCZuHgD4AH5gj6SDoOgfJCnEEog3KRCPAAdWMMZoBOaA8PgLBMNLTsxHGaBwEULAwAtBiBgWDwACkwFGABlW8PAGDwAAU8JYNA9OgdTNLAMyPEMeF4Q8FYmJsKCYL8SkeIAESI7gJlE8ToEk1gCBk-DCNdYjLlQPBxOQBilCc6gXNNc1LQ3NBPH4wThKo2RCOQQRZIIABbYKhJIPzMOAYK8Li8glnIF8sAnadZzoJQgA" data-background-interactive>
-						</section>
-					  <section> 
-						 <p> Liskov substitution (substituability)</p>
-						 <aside class="notes"> 
-							<p>If we expect a certain behavior from a type, its subtypes should honor it.</p>
-							<p>Thus, a client can use any subtype confidently. This helps decouple the client from the code it uses and improves interoperability.</p>
-							<p>A client of a supertype shouldn't have to behave differently depending on which subtype it uses.</p>
-							<p>Also, considering the behavior of the subtypes becomes predictable, the LSP proves itself an instance of the principle of least astonishment.</p>
-							<p>It proposes that a component of a system should behave in a way that most users will expect it to behave</p>
-						</aside>
-						 <p> You should be able to use a subclass in place of its parant class</p>
-						 <img src="../../assets/Liskov-Substitution-Principle.png" style="height: 500px; width: 650px;">
-						</section>
-						<section>
-							<p>If S is a subtype of T, then objects of type T in a program may be replaced with objects of type S without altering any of the desirable properties of that program (e.g. correctness).</p>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class Rectangle {
-									constructor(private width: number, private length: number) {}
-								  
-									public setWidth(width: number) {
-									  this.width = width;
-									}
-								  
-									public setLength(length: number) {
-									  this.length = length;
-									}
-								  
-									public getArea() {
-									  return this.width * this.length;
-									}
-								  }
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-							class Square extends Rectangle {
-								constructor(side: number) {
-								  super(side, side);
-								}
-							  
-								public setWidth(width: number) {
-								  // A square must maintain equal sides
-								  super.setWidth(width);
-								  super.setLength(width);
-								}
-							  
-								public setLength(length: number) {
-								  super.setWidth(length);
-								  super.setLength(length);
-								}
+						<img src="../../assets/exeption-filters.png" style="height: 500px; width: 1000px;">
+					</section>
+					<section>
+						<p>Out of the box, this action is performed by a built-in global exception filter, which handles exceptions of type HttpException (and subclasses of it). When an exception is unrecognized (is neither HttpException nor a class that inherits from HttpException), the built-in exception filter generates the following default JSON response.</p>
+					</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							{
+								"statusCode": 500,
+								"message": "Internal server error"
 							  }
-							</code></pre>
-							<aside class="notes"> 
-								While this design is still serviceable, it fails the Liskov test and misses out on the benefits mentioned earlier. Moreover, clients of our code may have to adapt, like so:
-							</aside>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								const rect: Rectangle = new Square(10); // Can be either a Rectangle or a Square
-								rect.setWidth(20);
-								expect(rect.getArea()).toBe(200); // ❌ If rect is a Square, area is 400
-							</code></pre>
-						</section>
-						<section id="fragments">
-							<pre><code class="typescript-language" data-trim data-noescape>
-								const rect: Rectangle = new Square(10);
-								rect.setWidth(20);
-								if (rect instanceof Square) {
-								  // ...
-								} else {
-								  // ...
-								}
-							</code></pre>
-							<p class="fragment"> Type checking a polymorphic value is a good indicator of an LSP violation.</p>
-						</section>
-					  <section> 
-						 <p> Interface segregation </p>
-						 <p> A class should not depend on methods that is does not need to implement </p>
-						 <img src="../../assets/Interface-Segregation-Principle.png" style="height: 500px; width: 650px;">
-						</section>
-						<section id="fragments">
-							<p>How to recognize the issue?</p>
-							<p class="fragment">You dont know how to implement the interface method</p>
-							<p class="fragment">The interface method does not belong to the class</p>
-							<p class="fragment">You are forced to leave a method empty</p>
-							<p class="fragment">You are forced to throw a generic exeption</p>
-							<img class="fragment" src="../../assets/interface-bird.png" style="height: 200px;">
-							<img class="fragment" src="../../assets/class-penguin.png" style="height: 200px;">
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								export interface SmartDevice {
-									call(contact: string): void;
-									sendSms(contact: string, text: string): void;
-									openApp(path: string): void;
-									connectToWifi(ssid: string, password: string): void;
-								  }
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								export class SmartPhone implements SmartDevice {
-									call(contact: string): void {
-									  console.log("Calling " + contact);
-									}
-									sendSms(contact: string, text: string): void {
-									  console.log("Texting " + text + " to " + contact);
-									}
-									openApp(path: string): void {
-									  console.log("Opening App " + path);
-									}
-									connectToWifi(ssid: string, password: string): void {
-									  console.log("Connecting to Wifi " + ssid + " with password " + password);
-									}
-								  }
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								export class Tablet implements SmartDevice {
-									call(contact: string): void {
-									  throw new Error("can not place a call.");
-									}
-									sendSms(contact: string, text: string): void {
-									  throw new Error("can not send an sms message.");
-									}
-									openApp(path: string): void {
-									  console.log("Opening App " + path);
-									}
-									connectToWifi(ssid: string, password: string): void {
-									  console.log("Connecting to Wifi " + ssid + " with password " + password);
-									}
-								  }
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								export interface SmartDevice {
-									call?(contact: string): void;
-									sendSms?(contact: string, text: string): void;
-									openApp(path: string): void;
-									connectToWifi(ssid: string, password: string): void;
-								  }
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								export interface SmartDevice {
-									openApp(path: string): void;
-									connectToWifi(ssid: string, password: string): void;
-								  }
-								  
-								  export interface PhoneDevice {
-									call(contact: string): void;
-									sendSms(contact: string, text: string): void;
-								  }
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								export class SmartPhone implements SmartDevice, PhoneDevice {
-									call(contact: string): void {
-									  console.log("Calling " + contact);
-									}
-									sendSms(contact: string, text: string): void {
-									  console.log("Texting " + text + " to " + contact);
-									}
-									openApp(path: string): void {
-									  console.log("Opening App " + path);
-									}
-									connectToWifi(ssid: string, password: string): void {
-									  console.log("Connecting to Wifi " + ssid + " with password " + password);
-									}
-								  }
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								export class Tablet implements SmartDevice {
-									openApp(path: string): void {
-									  console.log("Opening App " + path);
-									}
-									connectToWifi(ssid: string, password: string): void {
-									  console.log("Connecting to Wifi " + ssid + " with password " + password);
-									}
-								  }
-							</code></pre>
-						</section>
-					  <section> 
-						 <p> Dependency inversion </p> 
-						 <p>Your classes and modules sould depend on abstractions instead of concrete implementations </p>
-						 <img src="../../assets/Dependency-Inversion-Principle.png" style="height: 500px; width: 650px;">
-						</section>
-						<section id="fragments">
-							<p>Abstractions = Interfaces</p>
-							<p class="fragment">Your classes should depend on interfaces and not concrete classes</p>
-						</section>
-						<section id="fragments"> 
-						 <p> Think of a computer mouse </p>
-						 <p class="fragment">wired</p>
-						 <p class="fragment">wireless</p>
-						 <p class="fragment">Touchpad</p>
-						 <p class="fragment">Laser</p>
-						 <p class="fragment">Optical</p>
-						 <p class="fragment">Trackball</p>
-						</section>
-						<section>
-							<pre><code data-trim data-noescape>
-								interface Mouse {
-									onClickButtonOne:():void;
-									onClickButtonTwo:():void;
-									movePointer:() void;
-								}
-							</code></pre>
-						</section>
-						<section>
-						<p> Loose Coupling </p>
-						<aside class="notes"> 
-						<p>
-							1. in which components are weakly associated (have breakable relationship) with each other, and so, changes in one component least affect existence or performance of another component.
-						</p>	
-						<p>
-							2. in which each of its components has, or makes use of, little or no knowledge of the definitions of other separate components. Subareas include the coupling of classes, interfaces, data, and services.[1] Loose coupling is the opposite of tight coupling.	
-						</p>
-						</aside>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class Stripe {
-									constructor(private user: string){}
-							
-									makePayment(amountInCents: number){
-										console.log(`${this.user} made payment 
-										of $${amountInCents/100} with Stripe`)
-									}
-								}
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class Store {
-									private stripe: Stripe;
-							
-									constructor(private user: string){
-										this.stripe = new Stripe(user)
-									}
-							
-									purchaseBike(quantity: number){
-										this.stripe.makePayment(200 * quantity * 100)
-									}
-									purchaseHelment(quantity: number){
-										this.stripe.makePayment(15 * quantity * 100)
-									}
-								}
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class PayPal {
-									makePayment(user:string, amountInDollars:number){
-										console.log(`${user} made payment 
-										of $${amountInDollars} with Paypal`)
-									}
-								}
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class Store {
-									private paypal: PayPal;
-							
-									constructor(private user: string){
-										this.paypal = new PayPal()
-									}
-							
-									purchaseBike(quantity: number){
-										this.paypal.makePayment(this.user , 200 * quantity)
-									}
-									purchaseHelment(quantity: number){
-										this.paypal.makePayment(this.user, 15 * quantity)
-									}
-								}							
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								interface PaymnetProcessor{
-									pay(amountInDollars: number): void
-								}
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class Store {
-									constructor(private paymnetProcessor: PaymnetProcessor){}
-							
-									purchaseBike(quantity: number){
-										this.paymnetProcessor.pay( 200 * quantity)
-									}
-									purchaseHelment(quantity: number){
-										this.paymnetProcessor.pay(15 * quantity)
-									}
-							
-								}
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								class PayPalPaymentProcessor implements PaymnetProcessor {
-									payPal: PayPal;
-									constructor(private user: string){
-										this.payPal = new PayPal();
-									}
-									
-									pay(amountInDollars: number){
-										this.payPal.makePayment(this.user , amountInDollars)
-									}
-								}
-							</code></pre>
-						</section>
-						<section>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								stripeStore.purchaseBike(2)
-								stripeStore.purchaseHelment(2)
-							</code></pre>
-							<pre><code class="typescript-language" data-trim data-noescape>
-								paypalStore.purchaseBike(2)
-								paypalStore.purchaseHelment(2)
-							</code></pre>
-						</section>
-						<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/MYGwhgzhAEDKAuB7ATgU2gbwFDV33wiAdhPMgK7BLIAUADsgJYBuY86dYAngLZGrwACskTBUUFAC5og7nwHDR4iCgCUGAL5Yc+PHXLJgAC0ioAQowDWqGgEdyYIvEbwu0ouR4AjVMnU7dXXgjRggAOk5efiERMQlkCO4aaAAmAAY06AAqaHtHZ1dVAN0tQNx9QxMIVAAJVBAeVCc7BycXN2gPb19-MqCQ8Mj5GKV4xK4aAEYAVmzc1oKuIr6tYtX8RidfADMwMRk5aMU4lWRsPsiaMB5EcicASSIAEUQQcGQId08fP2lmREYABM1tp8KBIDAEEw6KhZLwmiMTihoIweHQQKhGk4YHDhsdlMjMMV8KRoahpFDGDCANzEvCEEhkSjUehMVjsaDkarIaSkzYAc16fTwwVCYT5MOgAF5OqgAO5wMhUmxcnq0lZ03Ca6CXa63B7PV7vT6db49c7C3Ci8IS1BhHhgay4hFXG53eCPF5vMAfOaTDLLMqlMogsHgKAHLiyEDOpz4+IotEYrHwHGHBSxAnIIkXbjR6Rw6PqsoM0nMlCslhsdCqnnQPlEQUWy3W8bR6WyhWFsAgGiqYuBYOBbW6t0Gr3Gr7dPzN4WtyLR+2O2FyF2t2vQAA00D17s9Rp9EEDg5BxXBEcpktnYOIZaoFYYVY5td5Ssb6nWZQdTtXzV3BoAYQRE0uh+IVLVLV47RARB+RoAADAASDB125DRoAdQEOF-eBoEQbZoEQ5D-w9IggOxAB6f00nQuUXCMRUyXg48SlPMMIUjdtrzwb8V3hZoXwbfltxI-dvQ+SRQPNbUbxIKCwhguCkIwWt0Mw7D+Nw-DCOIsdSInQ9aPoyNOBAZjtSHaBPwIW9cNtBAUHQGV+AVBy0BoFzGOVWNESzGgAHIAEEIDAbZ-NUfsz1snVuFMtynM7RVHI8+VOJ7Hz41OALgtC8LIuKezqDtCpjFMCxrBoFIWMKxyIgMUrqjqBoXSq0E9Fint4rqyoyqsGxWvwSI4qK7qGtqeoU0q1QgA" data-background-interactive>
-						</section>
-						<section id="fragments">
-							<p>But what if I'm not the one who is in charge of creating the class? Inversion of control</p>
-						</section>
-				 	</section>
-				<section>
-					<section> 
-					 <p>
-						 UML class diagram 
-					</p>
+						</code></pre>
 					</section>
-						 <section>
-							 <p>Visibility</p>
-							 <img src="../../assets/Visibility.png" width="1000" height="250">
-						 </section>
-						 <section>
-							 <p>UML relations notation</p>
-							 <img src="../../assets/Relations.png" width="1000" height="450">
-						 </section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="3">
+							@Get()
+							async findAll() {
+							  throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+							}
+						</code></pre>
 					</section>
-				</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							{
+								"statusCode": 403,
+								"message": "Forbidden"
+							  }
+						</code></pre>
+					</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="3-6">
+							@Get()
+							async findAll() {
+							  throw new HttpException({
+								status: HttpStatus.FORBIDDEN,
+								error: 'This is a custom message',
+							  }, HttpStatus.FORBIDDEN);
+							}
+						</code></pre>
+					</section>
+					<section>
+						<img src="../../assets/costume-exeptions.png" style="height: 500px; width: 1000px;">
+					</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="3">
+							@Get()
+							async findAll() {
+							  throw new ForbiddenException();
+							}
+						</code></pre>
+					</section>
+					<section>
+						<p>Exception filters</p>
+					</section>
+					<section>
+						<p>While the base (built-in) exception filter can automatically handle many cases for you, you may want full control over the exceptions layer. For example, you may want to add logging or use a different JSON schema based on some dynamic factors. Exception filters are designed for exactly this purpose. They let you control the exact flow of control and the content of the response sent back to the client</p>
+					</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+							import { Request, Response } from 'express';
+							
+							@Catch(HttpException)
+							export class HttpExceptionFilter implements ExceptionFilter {
+							  catch(exception: HttpException, host: ArgumentsHost) {
+								const ctx = host.switchToHttp();
+								const response = ctx.getResponse<Response>();
+								const request = ctx.getRequest<Request>();
+								const status = exception.getStatus();
+							
+								response
+								  .status(status)
+								  .json({
+									statusCode: status,
+									timestamp: new Date().toISOString(),
+									path: request.url,
+								  });
+							  }
+							}
+						</code></pre>
+					</section>
+                </section> 
+                <section>
+                    <section>
+                        Pipes
+                    </section>
+                </section> 
+                <section>
+                    <section>
+                        Guards
+                    </section>
+                </section> 
+                <section>
+                    <section>
+                        Interceptors
+                    </section>
+                </section> 
+                <section>
+                    <section>
+                        Custom decorators
+                    </section>
+                </section> 
 			</div>
 		</div>
 
