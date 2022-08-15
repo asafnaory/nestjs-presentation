@@ -12,19 +12,134 @@
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="../../plugin/highlight/monokai.css">
+		<style>
+			.reveal {
+				background-color: black
+			}
+		</style>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 				<section> Other Building Blocks </section>
-                <section>
                     <section>
-                        Middleware
+						<section>
+							<h4>
+								Middlewares
+							</h4>
+						</section>
+						<section>
+							<p>Middleware is a function which is called before the route handler. Middleware functions have access to the request and response objects, and the next() middleware function in the application’s request-response cycle</p>
+						</section>
+						<section>
+							<img src="../../assets/middleware.png" style="height: 500px; width: 1000px;">
+						</section>
+						<section id="fragments">
+							<p>Middleware functions can perform the following tasks:</p>
+							<p class="fragment">execute any code.</p>
+							<p class="fragment">make changes to the request and the response objects.</p>
+							<p class="fragment">end the request-response cycle.</p>
+							<p class="fragment">call the next middleware function in the stack.</p>
+							<p class="fragment"> the current middleware function does not end the request-response cycle, it must call next() to pass control to the next middleware function. Otherwise, the request will be left hanging.</p>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								import { Injectable, NestMiddleware } from '@nestjs/common';
+								import { Request, Response, NextFunction } from 'express';
+								
+								@Injectable()
+								export class LoggerMiddleware implements NestMiddleware {
+								  use(req: Request, res: Response, next: NextFunction) {
+									console.log('Hi from middleware...');
+									next();
+								  }
+								}								
+							</code></pre>
+						</section>
+						<section id="fragments">
+							<p>Middlewares are not specificly tied to any method</p>
+							<p class="fragment">We can not bind them in a declarative way using decorators</p>
+							<p class="fragment">Instead we bind middlewares to a route path represented as a string </p>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape data-trim data-noescape data-line-numbers="1-15 | 12">
+								import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+								import { LoggerMiddleware } from './common/middleware/logger.middleware';
+								import { CatsModule } from './cats/cats.module';
+								
+								@Module({
+								  imports: [CatsModule],
+								})
+								export class AppModule implements NestModule {
+								  configure(consumer: MiddlewareConsumer) {
+									consumer
+									  .apply(LoggerMiddleware)
+									  .forRoutes('*');
+								  }
+								}						
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-15 | 12">
+								import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+								import { LoggerMiddleware } from './common/middleware/logger.middleware';
+								import { CatsModule } from './cats/cats.module';
+								
+								@Module({
+								  imports: [CatsModule],
+								})
+								export class AppModule implements NestModule {
+								  configure(consumer: MiddlewareConsumer) {
+									consumer
+									  .apply(LoggerMiddleware)
+									  .forRoutes('cats');
+								  }
+								}						
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-15 | 12 | 1">
+								import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+								import { LoggerMiddleware } from './common/middleware/logger.middleware';
+								import { CatsModule } from './cats/cats.module';
+								
+								@Module({
+								  imports: [CatsModule],
+								})
+								export class AppModule implements NestModule {
+								  configure(consumer: MiddlewareConsumer) {
+									consumer
+									  .apply(LoggerMiddleware)
+									  .forRoutes({path: 'cats', method: RequestMethod.GET });
+								  }
+								}						
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape data-trim data-noescape data-line-numbers="1-15 | 12-13">
+								import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+								import { LoggerMiddleware } from './common/middleware/logger.middleware';
+								import { CatsModule } from './cats/cats.module';
+								
+								@Module({
+								  imports: [CatsModule],
+								})
+								export class AppModule implements NestModule {
+								  configure(consumer: MiddlewareConsumer) {
+									consumer
+									  .apply(LoggerMiddleware)
+									  ,exclude('cats')
+									  .forRoutes('*');
+								  }
+								}						
+							</code></pre>
+						</section>
                     </section>
-                </section> 
                 <section>
                     <section>
-                        Exception filters
+						<h4>
+							Exception filters
+						</h4>
                     </section>
 					<section>
 						<p>Nest comes with a built-in exceptions layer which is responsible for processing all unhandled exceptions across an application. When an exception is not handled by your application code, it is caught by this layer, which then automatically sends an appropriate user-friendly response.</p>
@@ -82,12 +197,13 @@
 						</code></pre>
 					</section>
 					<section>
-						<p>Exception filters</p>
+							<p>Exception filters</p>
 					</section>
 					<section>
 						<p>While the base (built-in) exception filter can automatically handle many cases for you, you may want full control over the exceptions layer. For example, you may want to add logging or use a different JSON schema based on some dynamic factors. Exception filters are designed for exactly this purpose. They let you control the exact flow of control and the content of the response sent back to the client</p>
 					</section>
 					<section>
+						<p>http-exceeption.filter.ts</p>
 						<pre><code class="typescript-language" data-trim data-noescape>
 							import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 							import { Request, Response } from 'express';
@@ -99,10 +215,15 @@
 								const response = ctx.getResponse<Response>();
 								const request = ctx.getRequest<Request>();
 								const status = exception.getStatus();
-							
+								const exceptionResponse = exception.getResponse();
+								const error = typeof response === 'string' ? 
+								{message: exceptionResponse}: 
+								{ ...exceptionResponse }
+
 								response
 								  .status(status)
 								  .json({
+									...error,
 									statusCode: status,
 									timestamp: new Date().toISOString(),
 									path: request.url,
@@ -111,27 +232,246 @@
 							}
 						</code></pre>
 					</section>
+					<section>
+						<p>main.ts</p>
+						<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="3">
+							async function bootstrap() {
+								const app = await NestFactory.create(AppModule);
+								app.useGlobalFilters(new HttpExceptionFilter());
+								await app.listen(3000);
+							  }
+							  bootstrap();
+						</code></pre>
+					</section>
                 </section> 
+                    <section>
+						<section>
+							<h4>
+								Pipes
+							</h4>
+						</section>
+						<section id="fragments">
+							<p>Pipes have two typical use cases:</p>
+							<p class="fragment">1. transformation: transform input data to the desired form (e.g., from string to integer)</p>
+							<p class="fragment">2. validation: evaluate input data and if valid, simply pass it through unchanged; otherwise, throw an exception when the data is incorrect	</p>
+						</section>
+						<section>
+							<img src="../../assets/pipes.png" style="height: 350px; width: 800px;">
+						</section>
+						<section id="fragments">
+							<p class="fragment">Nest interposes a pipe just before a method is invoked, and the pipe receives the arguments destined for the method and operates on them.</p>
+							<p class="fragment">Any transformation or validation operation takes place at that time, after which the route handler is invoked with any (potentially) transformed arguments.</p>
+						</section>
+						<section>
+							<img src="../../assets/built-in-pipes.png" style="height: 350px; width: 800px;">
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-4 | 2">
+								@Get(':id')
+								async findOne(@Param('id', ParseIntPipe) id: number) {
+								  return this.catsService.findOne(id);
+								}	
+								</code></pre>
+						</section>
+						<section id="fragments">
+							<p class="fragment">if I'll send this:</p>
+							<p class="fragment">GET localhost:3000/abc</p>
+							<p class="fragment">I'll get this:</p>
+							<pre class="fragment"><code class="typescript-language" data-trim data-noescape>
+								{
+									"statusCode": 400,
+									"message": "Validation failed (numeric string is expected)",
+									"error": "Bad Request"
+								}
+								</code></pre>
+						</section>
+						<section>
+							<p>costume pipes</p>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
+
+								@Injectable()
+								export class ParseIntPipe implements PipeTransform<string, number> {
+								  transform(value: string, metadata: ArgumentMetadata): number {
+									const val = parseInt(value, 10);
+									if (isNaN(val)) {
+									  throw new BadRequestException('Validation failed');
+									}
+									return val;
+								  }
+								}
+								</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								@Get(':id')
+								async findOne(@Param('id', new ParseIntPipe()) id) {
+								  return this.catsService.findOne(id);
+								}
+								</code></pre>
+						</section>
+                    </section>
                 <section>
                     <section>
-                        Pipes
+                       <h4>
+						   Guards
+					   </h4>
                     </section>
-                </section> 
-                <section>
+					<section>
+						<p>Guards have a single responsibility. They determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc.) present at run-time. This is often referred to as authorization. Authorization (and its cousin, authentication, with which it usually collaborates) has typically been handled by middleware in traditional Express applications. Middleware is a fine choice for authentication, since things like token validation and attaching properties to the request object are not strongly connected with a particular route context (and its metadata).</p>
+					</section>
+					<section>
+						<img src="../../assets/guards.png" style="height: 350px; width: 800px;">
+					</section>
+					<section>
+						<p>example.guard.ts</p>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+							import { Observable } from 'rxjs';
+							
+							@Injectable()
+							export class ExampleGuard implements CanActivate {
+								canActivate(
+									context: ExecutionContext,
+									): boolean | Promise<boolean> | Observable<boolean> {
+										return true;
+									}
+								}
+								
+							</code></pre>
+					</section>
+					<section id="fragments">
+						<p>example.guard.ts</p>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							@Controller('cats')
+							@UseGuards(ExampleGuard )
+							export class CatsController {}
+						</code></pre>
+						<p class="fragment">@UseGuards() decorator may take a single argument, or a comma-separated list of arguments</p>
+					</section> 
+					<section id="fragments">
+						<pre><code class="typescript-language" data-trim data-noescape>
+							const app = await NestFactory.create(AppModule);
+							app.useGlobalGuards(new RolesGuard());
+						</code></pre>
+					</section> 
+					<section id="fragments">
+						<p>We will see 2 types of guards</p>
+						<p class="fragment">1. Auth Gaurd - a guard the is used for authenticati on</p>
+						<p class="fragment">2. Role Gaurd - a guard the is used for authorization</p>
+					</section>
+				</section> 
                     <section>
-                        Guards
+						<section>
+							<h4>
+								Interceptors
+							</h4>
+						</section>
+						<section id="fragments">
+							<p>Interceptors have a set of useful capabilities which make it easy to add logic to existing code, without modify the code itself. They make it possible to:</p>
+							<p class="fragment">bind extra logic before / after method execution</p>
+							<p class="fragment">transform the result returned from a function</p>
+							<p class="fragment">transform the exception thrown from a function</p>
+							<p class="fragment">extend the basic function behavior</p>
+							<p class="fragment">completely override a function depending on specific conditions (e.g., for caching purposes)</p>
+						</section>
+						<section>
+							<img src="../../assets/interceptors.png" style="height: 350px; width: 800px;">
+						</section>
+						<section>
+							<p>logging.interceptor.ts</p>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+								import { Observable } from 'rxjs';
+								import { tap } from 'rxjs/operators';
+								
+								@Injectable()
+								export class LoggingInterceptor implements NestInterceptor {
+								  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+									console.log('Before...');
+								
+									const now = Date.now();
+									return next
+									  .handle()
+									  .pipe(
+										tap(() => console.log(`After... ${Date.now() - now}ms`)),
+									  );
+								  }
+								}
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								@UseInterceptors(new LoggingInterceptor())
+								export class CatsController {}
+							</code></pre>
+						</section> 
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								const app = await NestFactory.create(AppModule);
+								app.useGlobalInterceptors(new Loggin
+							</code></pre>
+						</section> 
                     </section>
-                </section> 
-                <section>
                     <section>
-                        Interceptors
+						<section>
+							<h4>
+								Custom decorators
+							</h4>
+						</section>
+						<section>
+							<img src="../../assets/param-decorators.png" style="height: 650px; width: 900px;">
+						</section>
+						<section>
+							<p>Additionally, you can create your own custom decorators. Why is this useful?</p>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+								export const User = createParamDecorator(
+								(data: unknown, ctx: ExecutionContext) => {
+									const request = ctx.switchToHttp().getRequest();
+									return request.user;
+									},
+								);
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								@Get()
+								async findOne(@User() user: UserEntity) {
+								  console.log(user);
+								}								
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+								export const User = createParamDecorator(
+								  (data: string, ctx: ExecutionContext) => {
+									const request = ctx.switchToHttp().getRequest();
+									const user = request.user;
+								
+									return data ? user?.[data] : user;
+								  },
+								);						
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape>
+								@Get()
+								async findOne(@User('firstName') firstName: string) {
+								  console.log(`Hello ${firstName}`);
+								}						
+							</code></pre>
+						</section>
                     </section>
-                </section> 
-                <section>
-                    <section>
-                        Custom decorators
-                    </section>
-                </section> 
+				<section>
+					<img src="../../assets/request-lifecycle.png" style="height: 650px; width: 700px;">
+				</section>
 			</div>
 		</div>
 
