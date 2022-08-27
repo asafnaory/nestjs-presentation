@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="../../dist/reset.css" />
+    <link rel="stylesheet" href="../../dist/reveal.css" />
+    <link rel="stylesheet" href="../../dist/theme/black.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="../../plugin/highlight/monokai.css" />
+
+</head>
+<style>
+    .reveal {
+        background-color: black
+    }
+</style>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+           <section>
+                <section>What is MongoDB?</section>
+                <section>
+                    <p>MongoDB is a schema-less NoSQL document database. It means you can store JSON documents in it, and the structure of these documents can vary as it is not enforced like SQL databases. This is one of the advantages of using NoSQL as it speeds up application development and reduces the complexity of deployments.</p>
+                </section>
+           </section>
+           <section>
+               <section>What is Mongoose</section>
+               <section>
+                   <p>Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js. It manages relationships between data, provides schema validation, and is used to translate between objects in code and the representation of those objects in MongoDB.</p>
+                </section>
+            </section>
+           <section>
+            <img src="../../assets/mongo-and-mongoose.png" style="height: 650px; width: 1000px;">
+        </section>
+        <section>
+            <section>
+                <h4>Terminologies</h4>
+            </section>
+            <section id="fragments">
+                <p>Collections</p>
+                <p class="fragment">
+                    ‘Collections’ in Mongo are equivalent to tables in relational databases. They can hold multiple JSON documents.
+                </p>
+            </section>
+            <section id="fragments">
+                <p>Documents</p>
+                <p class="fragment">
+                    ‘Documents’ are equivalent to records or rows of data in SQL. While a SQL row can reference data in other tables, Mongo documents usually combine that in a document.
+                </p>
+            </section>
+            <section id="fragments">
+                <p>Fields</p>
+                <p class="fragment">
+                    ‘Fields’ or attributes are similar to columns in a SQL table.
+                </p>
+            </section>
+            <section id="fragments">
+                <p>Schema</p>
+                <p class="fragment">
+                    While Mongo is schema-less, SQL defines a schema via the table definition. A Mongoose ‘schema’ is a document data structure (or shape of the document) that is enforced via the application layer.
+                </p>
+            </section>
+            <section id="fragments">
+                <p>Models</p>
+                <p class="fragment">
+                    ‘Models’ are higher-order constructors that take a schema and create an instance of a document equivalent to records in a relational database.
+                </p>
+            </section>
+        </section>
+        <section id="fragments">
+            <p>How to install and run mongodb on your machine</p>
+            <p class="fragment">install docker</p>
+            <p class="fragment">docker run --name mongo -p 27017:27017 -d mongo </p>
+        </section>
+        <section>
+            <p>connect to mongodb in nest app</p>
+            <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 8">
+                import { Module } from '@nestjs/common';
+                import { MongooseModule} from '@nestjs/mongoose';
+                import { AppController } from './app.controller';
+                import { AppService } from './app.service';
+      
+                @Module({
+                    imports: [
+                      MongooseModule.forRoot('mongodb://localhost:27017/nest-course'),
+                    ],
+                    controllers: [AppController],
+                    providers: [AppService],
+                  })
+                  export class AppModule {}
+              </code></pre>
+        </section>
+        <section>
+            <section>
+                <h4>Creating a Mongoose Model </h4>
+            </section>
+            <section id="fragments">
+                <p>to create a mongoose model, first we need to define a schema for it.</p>
+                <p class="fragment">every schema we create maps to a mogodb collection and defins the shape of the documents in that collection</p>
+            </section>
+            <section id="fragments">
+                <p>Schema</p>
+                <pre><code class="typescript-language" data-trim data-noescape>
+                    import { Schema ,Prop, SchemaFactory } from "@nestjs/mongoose";
+                    import { Document, Types } from 'mongoose';                    
+                    
+                    @Schema()
+                    export class Cat extends Document {
+                        @Prop()name : string
+                        @Prop()age : string
+                        @Prop([String])friends: string[]
+                    }
+                    
+                    export const CatSchema = SchemaFactory.createForClass(Cat)
+                  </code></pre>
+                  <p class="fragment"> mongo creates all collections plural and lower case by default. entity Cat wll be collection cats</p>
+            </section>
+            <section>
+                <section>
+                    <p>cats.module.ts</p>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 |3-8">
+                        @Module({
+                            imports: [
+                              MongooseModule.forFeature([
+                                {
+                                  name: Cat.name,
+                                  schema: CatSchema,
+                                },
+                              ]),
+                            ],
+                            controllers: [CatsController],
+                            providers: [CatsService],
+                          })
+                          export class PlayersModule {}
+                      </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <p>cats.service.ts</p>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 |3-8">
+                        import { Injectable } from '@nestjs/common';
+                        import { InjectModel } from '@nestjs/mongoose';
+                        import { Model } from 'mongoose';
+                        import { Cat } from './entities/cat.entity';
+                        export class PlayersService {
+                            constructor(
+                              @InjectModel(Cat.name) private readonly catModel: Model<Cat>,
+                            ) {} 
+                            async getAllCats(): Promise<Cat[]> {
+                                return await this.catModel.find();
+                              }
+                              // ...
+                        }
+                    </code></pre>
+                </section>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h4>Relationships</h4>
+            </section>
+            <section>
+                <p>types of relationships?</p>
+            </section>
+            <section id="fragments">
+                <p id="fragments">Relationships can be accomplished in 2 way</p>
+                <p class="fragment">1. embed sub document </p>
+                <p class="fragment">2. reference id only</p>
+            </section>
+            <section>
+                <h4>embed sub document</h4>
+            </section>
+            <section>
+                <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 |9">
+                    import { Schema ,Prop, SchemaFactory } from "@nestjs/mongoose";
+                    import { Document, Types } from 'mongoose';          
+                    import { Cat, CatSchema } from '../../cats/entities/cat.entity';          
+                    
+                    @Schema()
+                    export class CatGroup extends Document {
+                        @Prop()name : string;
+                        @Prop()catAmount : number;
+                        @Prop([CatSchema]) cats: Cat[];
+                    }
+                    
+                    export const CatGroupschema = SchemaFactory.createForClass(CatGroup)
+                  </code></pre>
+            </section>
+            <section>
+                <h4>reference id only</h4>
+            </section>
+            <section>
+                <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 |10">
+                    import { Schema ,Prop, SchemaFactory } from "@nestjs/mongoose";
+                    import { Document, Types } from 'mongoose';                    
+                    import { CatGroup } from "../../cat-group/entities/cat-group.entity";
+                    
+                    @Schema()
+                    export class Cat extends Document {
+                        @Prop()name : string
+                        @Prop()age : string
+                        @Prop([String])friends: string[]
+                        @Prop({type: Types.ObjectId, ref: 'CatGroup'}) catGroup: CatGroup; 
+                    }
+                    
+                    export const CatSchema = SchemaFactory.createForClass(Cat)
+                  </code></pre>
+            </section>
+        </section>
+        </div>
+    </div>
+    <script src="../../dist/reveal.js"></script>
+    <script src="../../plugin/notes/notes.js"></script>
+    <script src="../../plugin/markdown/markdown.js"></script>
+    <script src="../../plugin/highlight/highlight.js"></script>
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            hash: true,
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+        });
+    </script>
+</body>
+
+</html>

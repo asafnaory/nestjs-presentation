@@ -84,17 +84,24 @@
                     <p class="fragment"> for most applications, the resulting architecture will employ multiple modules, each encapsulating a closely related set of capabilities. </p>
                 </section>
                 <section id="fragments">
-                    <p class="fragment"> The @Module() decorator takes a single object whose properties describe the module</p>
-                    <p class="fragment"> providers: the providers that will be instantiated by the Nest injector and that may be shared at least across this module </p>
-                    <p class="fragment"> controllers: the set of controllers defined in this module which have to be instantiated</p>
-                    <p class="fragment"> imports: the list of imported modules that export the providers which are required in this module </p>
-                    <p class="fragment"> exports: the subset of providers that are provided by this module and should be available in other modules which import this module. You can use either the provider itself or just its token (provide value)</p>
+                    <p> The @Module() decorator takes a single object whose properties describe the module</p>
+                </section>
+                <section>
+                    <p> providers: the providers that will be instantiated by the Nest injector and that may be shared at least across this module </p>
+                </section>
+                <section>
+                    <p> controllers: the set of controllers defined in this module which have to be instantiated</p>
+                </section>
+                <section>
+                    <p> imports: the list of imported modules that export the providers which are required in this module </p>
+                </section>
+                <section>
+                    <p> exports: the subset of providers that are provided by this module and should be available in other modules which import this module. You can use either the provider itself or just its token (provide value)</p>
                 </section>
                 <section id="fragments">
                     <p>Type of modules</p>
                     <p class="fragment">Feature modules</p>
                     <p class="fragment">Shared modules</p>
-                    <p class="fragment">Module re-exporting</p>
                     <p class="fragment">Global modules</p>
                     <p class="fragment">Dynamic modules</p>
                 </section>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../../dist/zenburn.css" />
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="../../dist/reset.css" />
+    <link rel="stylesheet" href="../../dist/reveal.css" />
+    <link rel="stylesheet" href="../../dist/theme/black.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="../../plugin/highlight/monokai.css" />
+    <style>
+			.reveal {
+				background-color: black
+			}
+		</style>
+  </head>
+  
+  <body>
+    <div class="reveal">
+      <div class="slides">  
+        <section>
+          <section>
+            <h4>DTO validations</h4>
+          </section>
+          <section>
+            <p>npm i --save class-validator class-transformer</p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 |4| 7">
+              import { IsEmail, IsNotEmpty } from 'class-validator';
+
+              export class CreateUserDto {
+                @IsEmail()
+                email: string;
+              
+                @IsNotEmpty()
+                password: string;
+              }
+              </code></pre>
+        </section>
+        <section>
+          <pre><code class="typescript-language" data-trim data-noescape>
+            {
+              "statusCode": 400,
+              "error": "Bad Request",
+              "message": ["email must be an email"]
+            }
+            </code></pre>
+        </section>
+        <section>
+          <h4>Validate objects</h4>
+        </section>
+        <section>
+          <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 3-8 | 11-12">
+            import { ValidateNested } from 'class-validator';
+
+            class UserDto {
+              @IsString()
+              name: string;
+              @IsNumber()
+              age: number;
+            }
+
+            export class Post {
+              @ValidateNested()
+              @Type(() => UserDto)
+              user: UserDto;
+            }
+            </code></pre>
+      </section>
+        <section>
+          <h4>Validate arrays</h4>
+        </section>
+        <section>
+          <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 3-8 | 11-13">
+            import { ValidateNested } from 'class-validator';
+
+            class UserDto {
+              @IsString()
+              name: string;
+              @IsNumber()
+              age: number;
+            }
+
+            export class Post {
+              @IsArray()
+              @ValidateNested({ each: true })
+              @Type(() => UserDto)
+              user: UserDto[];
+            }
+            </code></pre>
+      </section>
+        <section>
+          <p>In addition to validating request bodies, the ValidationPipe can be used with other request object properties as well. Imagine that we would like to accept :id in the endpoint path. To ensure that only numbers are accepted for this request parameter, we can use the following construct:</p>
+        </section>
+        <section>
+          <pre><code class="typescript-language" data-trim data-noescape>
+            @Get(':id')
+            findOne(@Param() params: FindOneParams) {
+              return 'This action returns a user';
+            }
+            </code></pre>
+        </section>
+        <section>
+          <pre><code class="typescript-language" data-trim data-noescape>
+            import { IsNumberString } from 'class-validator';
+            export class FindOneParams {
+              @IsNumberString()
+              id: number;
+            }
+            </code></pre>
+        </section>
+        <section>
+          <h4>ValidationPipe options</h4>
+        </section>
+        <section id="fragments">
+          <p> forbidNonWhitelisted - If set to true, instead of stripping non-whitelisted properties validator will throw an error</p>
+          <p class="fragment"> transform - automatically transform payloads to be objects typed according to their DTO classes</p>
+          <p class="fragment"> whitelist -If set to true validator will strip validated object of any properties that do not have any decorators.</p> 
+          <p class="fragment"> transformOptions: { enableImplicitConversion: true, }, -If set to true class-transformer will attempt conversion based on TS reflected type.</p> 
+        </section>
+        <section>
+          <pre><code class="typescript-language" data-trim data-noescape>
+            import { ValidationPipe } from '@nestjs/common';
+            import { NestFactory } from '@nestjs/core';
+            import { AppModule } from './app.module';
+            
+            async function bootstrap() {
+              const app = await NestFactory.create(AppModule);
+              app.useGlobalPipes(new ValidationPipe({
+                whitelist: true,
+                transform: true,
+                transformOptions: {
+                  enableImplicitConversion: true,
+                },
+              }
+              ));
+              await app.listen(3000);
+            }
+            bootstrap();
+            </code></pre>
+        </section>
+        </section>
+        <section>
+          <section>
+            <h4>Mapped types</h4>
+          </section>
+          <section>
+            <p>As you build out features like CRUD (Create/Read/Update/Delete) it's often useful to construct variants on a base entity type. Nest provides several utility functions that perform type transformations to make this task more convenient.</p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape>
+              export class CreateCatDto {
+                name: string;
+                age: number;
+                breed: string;
+              }
+          </code></pre>
+          </section>
+          <section id="fragments">
+            <p>PartialType()</p>
+            <p class="fragment">
+              The PartialType() function returns a type (class) with all the properties of the input type set to optional. For example, suppose we have a create type as follows:
+            </p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape>
+              export class UpdateCatDto extends PartialType(CreateCatDto) {}
+          </code></pre>
+          </section>
+          <section id="fragments">
+            <p>PickType()</p>
+            <p class="fragment">
+              The PickType() function constructs a new type (class) by picking a set of properties from an input type. For example, suppose we start with a type like:
+            </p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape>
+              export class UpdateCatAgeDto extends PickType(CreateCatDto, ['age'] as const) {}
+          </code></pre>
+          </section>
+          <section id="fragments">
+            <p>OmitType()</p>
+            <p class="fragment">
+              The OmitType() function constructs a type by picking all properties from an input type and then removing a particular set of keys. For example, suppose we start with a type like:
+            </p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape>
+              export class UpdateCatDto extends OmitType(CreateCatDto, ['name'] as const) {}
+          </code></pre>
+          </section>
+          <section id="fragments">
+            <p>IntersectionType()</p>
+            <p class="fragment">
+              The IntersectionType() function combines two types into one new type (class). For example, suppose we start with two types like:
+            </p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape>
+              export class CreateCatDto {
+                name: string;
+                breed: string;
+              }
+              
+              export class AdditionalCatInfo {
+                color: string;
+              }
+          </code></pre>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape>
+              export class UpdateCatDto extends IntersectionType(
+                CreateCatDto,
+                AdditionalCatInfo,
+              ) {}
+          </code></pre>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="../../dist/reveal.js"></script>
+    <script src="../../plugin/notes/notes.js"></script>
+    <script src="../../plugin/markdown/markdown.js"></script>
+    <script src="../../plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
