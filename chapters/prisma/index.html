@@ -13,1057 +13,350 @@
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="../../plugin/highlight/monokai.css">
 	</head>
+	<style>
+		.reveal {
+			background-color: black
+		}
+	</style>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 			<section>
-				<h4>
-					Advanced typing
-				</h4>
-				<aside class="notes">
-					TypeScript’s type system is very powerful because it allows expressing types in terms of other types.
-
-					The simplest form of this idea is generics, we actually have a wide variety of type operators available to use. It’s also possible to express types in terms of values that we already have.
-
-					By combining various type operators, we can express complex operations and values in a succinct, maintainable way. In this section we’ll cover ways to express a new type in terms of an existing type or value.
-
-					1. It is cool!
-					2. We can do things we have already done in another way, might be easier
-					3. Sometimes we dont have access to a type
-					4. sometimes we will have the almost the utility we want, so we know how to change it!
-
-
-				</aside>
+				<h4> Prisma</h4>
+				<h4>Picture!</h4>
 			</section>
 			<section>
-				<div style="display: flex; flex-direction: column; justify-content: center;">
-					<h4>Part 1: Utility Types</h4>
-					<p>TypeScript provides several utility types to facilitate common type transformations. These utilities are available globally.</p>
-				</div>
+				<h4>What is prisma?</h4>
 			</section>
-				<section id="fragments">
-					<section>
-						Partial Type
-						<p>Constructs a type with all properties of Type set to optional. This utility will return a type that represents all subsets of a given type.</p>
-					</section>
-					<section>
-						<p>for example - consider this interface </p>
-						<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-							interface Todo {
-								title: string;
-								description: string;
-							  }
-						  </script></code></pre>
-					</section>
-					<section>
-						<p>Lets say I want to create a function that updates a todo  </p>
-						<p class="fragment">I can pass to this function also a partial type:</p>
-						<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-							const todo1 = {
-								title: "organize desk",
-								description: "clear clutter",
-							  };
-							   
-							  const todo2 = updateTodo(todo1, {
-								description: "throw out trash",
-							  });
-						  </script></code></pre>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/JYOwLgpgTgZghgYwgAgCoHsAm7kG8BQyyYwYANhAFzIDOYUoA5gNyHKYQ0IMAOJ6IanQYgW+AL758MAK4gE-EMhk9McSBmwAKMFnTVN6ADTIYwCGUw0MAVVXqqyAApwoJOGQA8hgHwBKPDYoCDAZKCVcZAA6GN1sExioswsrW3tIZHFWSXwEATpiPQBGZABeQKISckcAInQoRjgQYAAvFA4aAGsaozYO7mA+YAFqGoQKV2RxmTBIKB6JVlz8sELsACYy5XSIQx1ikwIift5FUbAACyh0AHdkdBniKDgaC4XxP2YgA" data-background-interactive>
-					</section>
-				</section>
-					<section id="fragments">
-					<section>
-						Required Type
-						<p>Constructs a type consisting of all properties of Type set to required. The opposite of Partial.</p>
-					</section>
-					<section>
-						<p>Consider the next example:</p>
-						<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-							interface Props {
-								a?: number;
-								b?: string;
-							  }
-						  </script></code></pre>
-					</section>
-					<section>
-						<pre  data-id="code-animation" ><code class="hljs">	<script type="text/template">
-							const obj: Props = { a: 5 };
- 
-							const obj2: Required<Props> = { a: 5 };
-						  </script></code></pre>
-						  <p class="fragment"> This is an error!</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/PTAEAEFMCdoe2gZwFygEwHYAsBGAUAJYB2ALjAGYCGAxpKAArwAOioA3nqKJQPypEBXALYAjGAG5OoEX1CIS0YgHNJAXzx5qcIvNBwRAK1SM4LUAF523VAFZQqyZu279BtKgBKkAI4CC0SAATAB4TFgA+CytKW3txIA" data-background-interactive>
-					</section>
+			<section>
+				<p>Prisma is an open-source ORM for Node.js and TypeScript. It is used as an alternative to writing plain SQL, or using another database access tool such as SQL query builders (like knex.js) or ORMs (like TypeORM and Sequelize). Prisma currently supports PostgreSQL, MySQL, SQL Server, SQLite, MongoDB and CockroachDB.</p>
+			</section>
+			<section>
+				<p>While Prisma can be used with plain JavaScript, it embraces TypeScript and provides a level to type-safety that goes beyond the guarantees other ORMs in the TypeScript ecosystem. You can find an in-depth comparison of the type-safety guarantees of Prisma and TypeORM here.</p>
+			</section>
+			<section>
+				<section>
+					<h4>How to Set up Prisma in a nest project</h4>
 				</section>
 				<section id="fragments">
-					<section>
-						Readonly Type
-						<p>Constructs a type with all properties of Type set to readonly, meaning the properties of the constructed type cannot be reassigned.</p>
-						<p>This utility is useful for representing assignment expressions that will fail at runtime (i.e. when attempting to reassign properties of a frozen object).</p>
-					</section>
-					<section id="fragments">
-						<p>Example:</p>
-						<pre data-id="code-animation" ><code class="hljs">	<script type="text/template">
-							interface Todo {
-								title: string;
-							  }
-							   
-							  const todo: Readonly<Todo> = {
-								title: "Delete inactive users",
-							  };
-							   
-							  todo.title = "Hello";
-						  </script></code></pre>
-						  <p class="fragment">Error: Cannot assign to 'title' because it is a read-only property.</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/PTAEAEFMCdoe2gZwFygEwFYAsAGAUAJYB2ALjAGYCGAxpKACpwAmcoA3nqKCQSQDaRUiEtGIBzANx4AvnjzU4RYd2ZxUAJUiUWRPgE8APIxYA+UAF52nbrwGoARABFIAsqGI0eANzoBXRDCI9gA0MlJ4JKoAdDz8dJb2ABIufHD2EkA" data-background-interactive>
-					</section>
+					<p>Start by installing the Prisma CLI as a development dependency in your project:</p>
+					<p class="fragment">npm install prisma --save-dev</p>
 				</section>
 				<section id="fragments">
-					<section>
-						Record
-						<p>Constructs an object type whose property keys are Keys and whose property values are Type. This utility can be used to map the properties of a type to another type.</p>
-						<p> the Record type is not identical to the index signature <pre><code class="typescript-language" data-trim data-noescape> [name: string]: number; </code></pre>
-					</section>
-					<section>
-						<p>we can not use a Union type to describe an index signature key </p>
-							<pre><code class="typescript-language" data-trim data-noescape> 
-								[name: string | number]: number;
-								[name: "key1" | "key2"]: number;
-							</code></pre>
-							<p>howerver we can do it in Recored Type</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/JYOwLgpgTgZghgYwgAgMJzASRDA9sgbwChlk4BzCALmRAFcBbAI2gG4TkmoIIATGgM5goocuwC+RImACeABxTowAOTgMUAXmQAiBsBgwZ25AB8dTXCIHGzuy7269t7IglwghyBBgE0AShBuULwAPEqq6gA0aBjYeAB8yFrEpHoGMjQEZJQ0AIwADNFcPPw6AArQAsBwIMbikRwWVpnZ1MgArEXcfDTaALJwoIq47nUNqfaOLRRtuQBsXSW9AEIiYMACABbIAMqblmCbg1BjROIu3mACAHRNG+wA9A-IAHoA-EA" data-background-interactive>
-					</section>
+					<p>In the following steps, we'll be utilizing the Prisma CLI. As a best practice, it's recommended to invoke the CLI locally by prefixing it with npx:</p>
+					<p class="fragment">npx prisma</p>
 				</section>
-				<section>
-					<section>
-						Pick
-						<p>Constructs a type by picking the set of properties Keys (string literal or union of string literals) from Type.</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play#code/JYOwLgpgTgZghgYwgAgCoHsAm7kG8BQyyYwYANhAFzIDOYUoA5gNyHKYQ0IMAOJ6IanQYgWbBOgC2PCpEzUARunQU4IVgF98+MAE8eKDNgAKUCADdgEAO7IAvMmPAEAawA8R9ABpkAIhLkEL7IAD5+EtKyEJi+AHys+BIgdMRY6NSephZWtg4ERAEU1L4AwqogyFDKkr5e4lIyEHLU8GQ0EHUaCWBprAD0fcgAegD8QA" data-background-interactive>
-					</section>
+				<section id="fragments">
+					<p>Now create your initial Prisma setup using the init command of the Prisma CLI:</p>
+					<p class="fragment">npx prisma init</p>
 				</section>
-				<section>
-					<section>
-						Omit
-						<p>Constructs a type by picking all properties from Type and then removing Keys (string literal or union of string literals).</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/JYOwLgpgTgZghgYwgAgCoHsAm7kG8BQyyYwYANhAFzIDOYUoA5gNyHKYQ0IMAOJ6IanQYgWbBOgC2PCpEzUARunQU4IVkW4Q4cgIJhqIAK6SF0VgF98+MAE8eKDNgAKUCADdgEAO7IAvMgA8pKkADxO6AA0yABEHFy8-CAxAHys+BIgdMRY6NQRrh5evgEERCTkVLEAwqogyFDKkjGR4lIyEHLU8GQ0EK2abjoQmPrUAIwAbOMArDMALPMATDNLAOxrAAytFulguawA9IfIAHoA-NZ2Dmi5AJIgMDgBwWER0TES0rIjMcgAPrEtMNRmBUulMtl9tgHk98vdHs88GwKhRqDFnMAEABrZBGHjIbHATA0FpseLcYB8YACdEAaVAHCgjDgUEg9QQZHQfRoyB0yBmPGaOz2CKeRxOFyAA" data-background-interactive>
-					</section>
+				<section id="fragments">
+					<p>This command creates a new prisma directory with the following contents:	</p>
+					<p class="fragment">schema.prisma: Specifies your database connection and contains the database schema</p>
+					<p class="fragment">.env: A dotenv file, typically used to store your database credentials in a group of environment variables</p>
 				</section>
-				<section>
-					<section>
-						Exclude
-						<p>Constructs a type by excluding from UnionType all union members that are assignable to ExcludedMembers.</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/C4TwDgpgBAKgDFAvFAogDwMYBsCuATCAHgCIBDYqAHymICMLriNiAaG8gPgG4AoAej5QhUAHoB+HqEiwAjElSZcBEuSo16apq3YN1xbv0HDxk8NBgAmeemz4iAZ2AAnAJYA7AOZq3OALa0IJzUACmCASiQOKAA3AHsXPDC2ADEcNwxgF1i3AwFhUTEgA" data-background-interactive>
-					</section>
-				</section>
-				<section>
-					<section>
-						Extract
-						<p>Constructs a type by extracting from Type all union members that are assignable to Union.</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/C4TwDgpgBAKgDFAvFAogD2AJwIYGNgA8ARNkVAD5REBGZlRuRANFaRVQGZEB8A3AFAB6QVFFQAegH5+oSLACMSVBhz4CAZywBLAHYBzdjoCuAW2oRM7ABRWAlEm5QAbgHstAE1ssAYkZ34tFx0+IRExKSA" data-background-interactive>
-					</section>
-				</section>
-				<section>
-					<section>
-						NonNullable
-						<p>Constructs a type by excluding null and undefined from Type.</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/C4TwDgpgBAKgDFAvFAcgewHYoK4BtcCGARrhADwDOwATgJYYDmUAPlBtgLZETUtTYYAJhABm9CIIB8AbgBQAenlRlUAHoB+WaEiwAjElSYc+YqUo16DANoBdPu3x8BwsRgkyFSlRqA" data-background-interactive>
-					</section>
-				</section>
-				<section>
-					<section>
-						Parameters
-						<p>Constructs a tuple type from the types used in the parameters of a function type Type.</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/PTAEAEFMCdoe2gZwFygEwGYAsWBQATSAYwBsBDaSUAMwFcA7IgFwEs56aBGACgoHNUAb1BlU9WgFsARjADcoKakRNoLen1ABfAJSoAbnBb5ZuXEwCeAByoAVAAygAvKAAKFMhMhMYiADzdtJwA+UGVVdSCTEFAY0AA9AH4zK1tOJ1d3T28kfxRQlTU+QMcQgyNI3GjYxOTrUBs0dLdoDy8fX18bIN5oAXrikK6osGqkizqbDCbMtpzxyDhqLgqqmJr5+qxplqz2snpzFZG1sZT6gFZt1uy-ekg9GCPY+NOJgDYr3ZywwqfR2tsAHZPrM-AAxBjMNj0P4nIA" data-background-interactive>
-					</section>
-				</section>
-				<section>
-					<section>
-						ReturnType
-						<p>Constructs a type consisting of the return type of function Type</p>
-					</section>
-					<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/PTAEAEFMCdoe2gZwFygEwGYAsX3awFAAmkAxgDYCG0koAZgK4B2pALgJZxP0CMAFAEpUAb1CVUTBgFsARjADcoGakSto7JgHNQAX3kECrAJ4AHWgBUADKAC8oAEqRWDaE3OnIAHkG2AfKFV1LV99EFBw0AA9AH5DD1BzHlsHJxc3D28UALUNTQE-UAA3OHYiEIIwiJi4swS0ZMdnV3czT09zXx8bfw7QsCrY41rzDAbU5oz20EgAD1ZIJiJEUABVABpV6bmFpdBJWRgAbQBdTvzuhPLK8Oqhi1w7RrSWrzu4Ol4r-pvB+PMAVjGTXSrUoTCMXwiUV+wwAbEDnhkmJBCjBIQMahYAOwIiatQK5dE-TEJAAcuJBXgAYsw2JwmEToUA" data-background-interactive>
-					</section>
-				</section>
-				<section>
-					<p>InstanceType</p>
-					<p>ThisParameterType</p>
-					<p>OmitThisParameter</p>
-					<p>ThisType</p>
-					<p>Lowercase</p>
-					<p>Capitalize</p>
-					<p>Uncapitalize</p>
-				</section>
-			<section>
-				<div style="display: flex; flex-direction: column; justify-content: center;">
-					<h4>Part 2: Creating Types from Types</h4>
-					<p>TypeScript’s type system is very powerful because it allows expressing types in terms of other types.</p>
-					<p>we alredy learned about generics, lets dive in into some more conceps</p>
-				</div>
-			</section>
-			<section id="fragments">
-				<aside class="notes">
-					1. Keyof Type Operator - Using the keyof operator to create new types
-					2. Typeof Type Operator - Using the typeof operator to create new types
-					3. Indexed Access Types - Using Type['a'] syntax to access a subset of a type
-					4. Conditional Types - Types which act like if statements in the type system
-					5. Mapped Types - Creating types by mapping each property in an existing type
-					6. Template Literal Types - Mapped types which change properties via template literal strings
-				  </aside>
-				<ul>
-					<li>1. Keyof Type Operator </li>
-					<li class="fragment">2. Typeof Type Operator </li>
-					<li class="fragment">3. Indexed Access Types </li>
-					<li class="fragment">4. Conditional Types </li>
-					<li class="fragment">5. Mapped Types </li>
-					<li class="fragment">6. Template Literal Types</li>
-				</ul>
 			</section>
 			<section>
 				<section>
-				<p> Keyof Type Operator </p>	
-			</section>
-			<section>
-				<p>The keyof operator takes an object type and produces a string or numeric literal union of its keys. The following type P is the same type as “x” | “y”</p>
-			</section>
-			<section id="fragments">
-				<pre data-id="code-animation" ><code class="hljs">	<script type="text/template">
-					type Point = { x: number; y: number };
-					type P = keyof Point;
-				  </script></code></pre>
-				  <p class="fragment"> type P = keyof Point </p>
-				  <p class="fragment"> type P = “x” | “y”: </p>
-			</section>
-			<section>
-				<pre data-id="code-animation" ><code class="hljs">	<script type="text/template">
-					type Mapish = { [k: string]: boolean };
-					type M = keyof Mapish;
-				  </script></code></pre>
-				  <p class="fragment"> type M = string | number </p>
-				  <p class="fragment">Note that in this example, M is string | number — this is because JavaScript object keys are always coerced to a string, so obj[0] is always the same as obj["0"].</p>
-			</section>
-			</section>
-			<section>
-			<section id="fragments">
-					<p>Typeof Type Operator</p>	
+					<h4>Set the database connection</h4>
 				</section>
 				<section>
-					JavaScript already has a typeof operator you can use in an expression context:
+					<p>Your database connection is configured in the datasource block in your schema.prisma file. By default it's set to postgresql, but since you're using a SQLite database in this guide you need to adjust the provider field of the datasource block to sqlite</p>
 				</section>
 				<section>
-					<pre><code>
-						console.log(typeof "Hello world");
+					<pre><code class="typescript-language" data-trim data-noescape>
+						datasource db {
+							provider = "sqlite"
+							url      = env("DATABASE_URL")
+						  }
+						  
+						  generator client {
+							provider = "prisma-client-js"
+						  }
+					  </code></pre>
+				</section>
+				<section>
+					<p>Now, open up .env and adjust the DATABASE_URL environment variable to look as follows:</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+					DATABASE_URL="file:./dev.db"
 					</code></pre>
-					<p class="fragment">What will be printed?</p>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h4>database tables example:</h4>
 				</section>
 				<section>
-					TypeScript adds a typeof operator you can use in a type context to refer to the type of a variable or property:
-				</section>
-				<section>
-					<pre><code data-noescape>
-						let s = "hello";
-						let n: typeof s;
-						   
-						let n: string
-					</code>
-					</pre>
-					<aside class="notes"> 
-						How many types are in Javascript?
-					  </aside>
-				</section>
-				<section>
-					<pre data-id="code-animation" ><code class="hljs">	<script type="text/template">
-						function f() {
-							return { x: 10, y: 3 };
+					<p>file name: schema.prisma</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						model User {
+							id    Int     @default(autoincrement()) @id
+							email String  @unique
+							name  String?
+							posts Post[]
 						  }
-						  type P = ReturnType<typeof f>;
-					</script></code></pre>
-					<p class="fragment">What will be that type of P? </p>
-				</section>
-				<section>
-					<div>
-						type P = {
-							x: number;
-							y: number;
-						}
-					</div>
-				</section>
-			</section>
-			<section>
-			<section>
-			<p> Indexed Access Types (Lookup types) </p>	
-			</section>
-			<section id="fragments">
-			<p>We can use an indexed access type to look up a specific property on another type:</p>
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-			type Person = { age: number; name: string; alive: boolean };
-			type Age = Person["age"];
-			</script></code></pre>
-			<p class="fragment">
-				type Age = number
-			</p>
-			</section>
-			<section id="fragments">
-			<pre data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				type I1 = Person["age" | "name"];
-			</script></code></pre>
-			<p class="fragment">
-				type I1 = string | number
-			</p>
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				type I2 = Person[keyof Person];
-			</script></code></pre>
-			<p class="fragment">
-				type I2 = string | number | boolean
-			</p>
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				type AliveOrName = "alive" | "name";
-				type I3 = Person[AliveOrName];
-			</script></code></pre>
-			<p class="fragment">
-				type I3 = string | boolean
-			</p>					 
-			</section>
-			<section id="fragments">
-				<p>Another example of indexing with an arbitrary type is using number to get the type of an array’s elements. We can combine this with typeof to conveniently capture the element type of an array literal:				</p>
-			<pre  class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				const MyArray = [
-				{ name: "Alice", age: 15 },
-				{ name: "Bob", age: 23 },
-				{ name: "Eve", age: 38 },
-				];
-			</script></code></pre>
-			<pre  class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				type Person = typeof MyArray[number];
-			</script></code></pre>
-			<p class="fragment"> 
-				type Person = {
-					name: string;
-					age: number;
-				}
-			</p>
-			</section>
-			<section id="fragments">
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				type Age = typeof MyArray[number]["age"];
-			</script></code></pre>
-			<p class="fragment">type Age = number</p>
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				type Age2 = Person["age"];
-			</script></code></pre>
-			<p class="fragment">type Age2 = number</p>
-			</section>
-			<section id="fragments">
-			<p>You can only use types when indexing, meaning you can’t use a const to make a variable reference:</p>
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				const key = "age";
-				type Age = Person[key];
-			</script></code></pre>
-			<p class="fragment">
-				Type 'key' cannot be used as an index type.
-				'key' refers to a value, but is being used as a type here. Did you mean 'typeof key'?
-			</p>
-			</section>
-			<section id="fragments"> 
-				<p>However, you can use a type alias for a similar style of refactor:				</p>
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				type key = "age";
-				type Age = Person[key];
-			</script></code></pre>
-		</section>
-		<section>
-			<aside class="notes"> 
-				now let see how we can use index access type, the keyof operator and generics to create more complex types
-				lets say we want to create a generic function that recives any object (T) and any objects key and returns the propery in this key
-				describing access to any property in a given object
-			</aside>
-			<p> for example: </p>
-			<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-				function getProperty(obj, key){
-					return obj[key]
-				}
-			</script></code></pre>
-			</section>
-			<section>
-				<pre data-id="code-animation" ><code class="hljs">	<script type="text/template">
-					function getProperty<T>(obj:T , key: string){
-						return obj[key]
-					}
-				</script></code></pre>
-				<p>is that good enought? </p>
-			</section>
-			<section>
-				<img src="../../assets/keyof-error-T.png" />
-			</section>
-			<section>
-				<pre data-id="code-animation" ><code class="hljs" data-trim data-noescape>	<script type="text/template">
-					function getProperty<T, K extends keyof T>(obj:T , key: K) {
-						return obj[key]
-					}
-				</script></code></pre>
-				<aside class="notes"> 
-					now I can make sure no one will send to my function any other string but the keys of this type
-				  </aside>
-			</section>
-			<section>
-				<aside class="notes"> 
-					inferring the type of a parameter based on another parameter in a function
-					this is somehow simmilar pattern but a little bit more complex. 
-					here we infer a type based on another value
-				</aside>
-				<p>Consider the next example: </p>
-				<img src="../../assets/addEventListener-infer.png" />
-				<img src="../../assets/addEventListener-infer-2.png" />
-				<aside class="notes"> 
-					how typescript knows how to infer this type? 
-					
-					it infered the type of the callback argument from the name of the event in the first argument
-				  </aside>
-			</section>
-			<section>
-				<p>Lets try to create it!</p>
-			</section>
-			<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/JYOwLgpgTgZghgYwgAgLIE9UHsCuBnCAUQDcJxkBvAKAEgAPALmRBwFsAjaAblvSZY7QqAXyqhIsRCgwBpCOnZY4UACYkyYSrQDW8pnjBRQAcxFUx4aPCRp068AHl2AKwgJN1GggA2wBNqYMbHwiUnAeGl10AAcoCDw8QPQ5BSVVezAzKhgcEHdgLBBkAAs4EBVvUI0AHhlkCDpIcrxkKKwYWwynV3cAPmQACloIMLAAOThWCCYZABpaBDhvb3ZEAMHpztHutzAAbRkAXQBKZABefuIsYBVkGipjzwB6J-q6NxxIZDBilBy8sAFEAAOlByCyVFK5UqGQGAHIfH5tHDZhtjhcKMJjpCyhUquB4VFYvE8Ci0RisUA" data-background-interactive>
-			</section>
-			<section>
-				Quiz
-			</section>
-			<section id="fragments">
-				<p >Q: What is the other name for indexed access types? </p>
-				<p class="fragment">1. Lookout Types </p>
-				<p class="fragment">2. 1. Lookup Types</p>
-			</section>
-			<section id="fragments">
-				<p >Q: Given the following code:</p>
-				<pre data-id="code-animation" ><code class="hljs" data-trim data-noescape>	<script type="text/template">
-					type Request = {
-						params: {
-						  [key: string]: string;
-						};
-					  };
-				</script></code></pre>
-				<p>Q: How do we reuse the type of the params property?</p>
-				<p class="fragment">1. type Params = Request['params'] </p>
-				<p class="fragment">2. type Params = Request.params </p>
-			</section>
-			<section id="fragments">
-				<p>Q: Can we access the types of nested properties?</p>
-				<pre data-id="code-animation" ><code class="hljs" data-trim data-noescape>	<script type="text/template">
-					type Player = {
-						location: {
-						  x: number;
-						  y: number;
-						};
-					  };
-				</script></code></pre>
-				<p>Is Player['location']['x'] a valid expression?</p>
-				<p class="fragment">1. Yes </p>
-				<p class="fragment">2. No </p>
-			</section>
-			<section id="fragments">
-				<p>Q: What the keyof operator is used for?</p>
-				<p class="fragment">1. keyof is used for retrieving the names of the properties of a type</p>
-				<p class="fragment">2. keyof is used to determine if a given key belongs to a given type</p>
-			</section>
-			<section id="fragments">
-				<p>Q: We are given the following interface:</p>
-				<pre data-id="code-animation" ><code class="hljs" data-trim data-noescape>	<script type="text/template">
-					interface User {
-						name: string;
-						age: number;
-					  }
-				</script></code></pre>
-				<p>what is the expression - "keyof User" resolves to?</p>
-				<p class="fragment">1. "name" | "age" </p>
-				<p class="fragment">2. string | number </p>
-			</section>
-			<section id="fragments">
-				<p>Q: We have the following interface. This is a map that maps event names to their corresponding event object types.</p>
-				<pre data-id="code-animation" ><code class="hljs" data-trim data-noescape>	<script type="text/template">
-					interface MyEventsMap {
-						click: MyMouseEvent;
-						keypress: MyKeyboardEvent;
-					  }
-				</script></code></pre>
-				<p>What does the following expression resolve to:</p>
-				<p>type MyEvents = MyEventsMap[keyof MyEventsMap]</p>
-				<p class="fragment">1. MyMouseEvent | MyKeyboardEvent </p>
-				<p class="fragment">2. MyMouseEvent & MyKeyboardEvent</p>
-			</section>
-			<section id="fragments">
-				<p>Q: Given the following code: </p>
-				<pre data-id="code-animation" ><code class="hljs" data-trim data-noescape>	<script type="text/template">
-					interface MyEventsMap {
-						click: MyMouseEvent;
-						keypress: MyKeyboardEvent;
-					  }
-					  
-					  function handleEvent<K extends keyof MyEventsMap>(
-						eventName: K,
-						callback: (myEventObject: MyEventsMap[K]) => void
-					  ) {
-						// ...
-					  }
-				</script></code></pre>
-				<p>What is the type of the myEventObject parameter?</p>
-				<p class="fragment">1. MyMouseEvent | MyKeyboardEvent </p>
-				<p class="fragment">2. MyEventsMap[K] which resolves to MyMouseEvent & MyKeyboardEvent</p>
-			</section>
-			</section>
-			</section>
-			</section>
-			<section>
-				<section>
-					<p> Conditional Types </p>
-					<p> Conditional types help describe the relation between the types of inputs and outputs.</p>
-				</section>
-				<section id="fragments">
-					<p>Consider the next example: </p>
-					<pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
-						interface Animal {
-							live(): void;
+						  
+						  model Post {
+							id        Int      @default(autoincrement()) @id
+							title     String
+							content   String?
+							published Boolean? @default(false)
+							author    User?    @relation(fields: [authorId], references: [id])
+							authorId  Int?
 						  }
-						  interface Dog extends Animal {
-							woof(): void;
+					  </code></pre>
+				</section>
+				<section id="fragments">
+					<p>With your Prisma models in place, you can generate your SQL migration files and run them against the database. Run the following commands in your terminal:</p>
+					<p class="fragment">npx prisma migrate dev --name init</p>
+				</section>
+				<section>
+					<p>This prisma migrate dev command generates SQL files and directly runs them against the database. In this case, the following migration files was created in the existing prisma directory:</p>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h4>Prisma Client</h4>
+				</section>
+				<section>
+					<p>Prisma Client is a type-safe database client that's generated from your Prisma model definition. Because of this approach, Prisma Client can expose CRUD operations that are tailored specifically to your models.</p>
+				</section>
+				<section id="fragments">
+					<p>To install Prisma Client in your project, run the following command in your terminal:</p>
+					<p class="fragment">npm install @prisma/client</p>
+				</section>
+				<section>
+					<p>Note that during installation, Prisma automatically invokes the prisma generate command for you. In the future, you need to run this command after every change to your Prisma models to update your generated Prisma Client.</p>
+					<p>The prisma generate command reads your Prisma schema and updates the generated Prisma Client library inside node_modules/@prisma/client.	</p>
+				</section>
+			</section>
+			<section>
+				<section>
+				<h4>Use Prisma Client in your NestJS services</h4>
+				</section>
+				<section>
+					<p>When setting up your NestJS application, you'll want to abstract away the Prisma Client API for database queries within a service. To get started, you can create a new PrismaService that takes care of instantiating PrismaClient and connecting to your database.	</p>
+				</section>
+				<section>
+					<p>Inside the src directory, create a new file called prisma.service.ts and add the following code to it:</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
+						import { PrismaClient } from '@prisma/client';
+						
+						@Injectable()
+						export class PrismaService extends PrismaClient implements OnModuleInit {
+						  async onModuleInit() {
+							await this.$connect();
 						  }
-					</script></code></pre>
-				</section>
-				<section>
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type Example1 = Dog extends Animal ? number : string;
-					</script></code></pre>
-					<p class="fragment">type Example1 = number</p>
-				</section>
-				<section>
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type Example2 = RegExp extends Animal ? number : string;
-					</script></code></pre>
-					<p class="fragment">type Example2 = string</p>
-				</section>
-				<section>
-					<p>Conditional types take a form that looks a little like conditional expressions (condition ? trueExpression : falseExpression) in JavaScript:</p>
-					<p class="fragment">SomeType extends OtherType ? TrueType : FalseType;</p>
-				</section>
-				<section>
-					<p id="fragments"> Conditional types can be used before they are evaluated </p>
-					<aside class="notes"> 
-						"TYPE B"
-					  </aside>
-					<p>for example:</p>
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						function someFunction<T>(value:T){
-							const someOtherFucntion = (
-								someArg: T extends boolean ? "TYPE A" : "TYPE B" 
-							) => {}
-							return someOtherFucntion;
+						
+						  async enableShutdownHooks(app: INestApplication) {
+							this.$on('beforeExit', async () => {
+							  await app.close();
+							});
+						  }
 						}
-					</script></code></pre>
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						const reslut = someFunction('a string')
-					</script></code></pre>
-					<p class="fragment">what would be the type of "reslut" ? </p>
+					  </code></pre>
 				</section>
 				<section>
-					<aside class="notes"> 
-						"TYPE A" | "TYPE B"
-					  </aside>
-					<p>for example:</p>
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						function someFunction<T>(value:T){
-							const someOtherFucntion = (
-								someArg: T extends boolean ? "TYPE A" : "TYPE B" 
-							) => {}
-							return someOtherFucntion;
+					<p>Next, you can write services that you can use to make database calls for the User and Post models from your Prisma schema.</p>
+				</section>
+				<section>
+					<p>Still inside the src directory, create a new file called user.service.ts and add the following code to it:</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						import { Injectable } from '@nestjs/common';
+						import { PrismaService } from './prisma.service';
+						import { User, Prisma } from '@prisma/client';
+						
+						@Injectable()
+						export class UserService {
+						  constructor(private prisma: PrismaService) {}
+
+						  // Code...
 						}
-					</script></code></pre>
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						const reslut = someFunction('a string')
-					</script></code></pre>
-					<p class="fragment">what would be the type of "someArg" ? </p>
+					  </code></pre>
 				</section>
 				<section>
-					<p>Distributive Conditional Types</p>
+					<p>Notice how you're using Prisma Client's generated types to ensure that the methods that are exposed by your service are properly typed. You therefore save the boilerplate of typing your models and creating additional interface or DTO files.	</p>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h4>Peisma crush course</h4>
+				</section>
+				<section>
+					<h4>Model fields</h4>
+				</section>
+				<section id="fragmetns">
+					<p>every field composed of 4 different parts:</p>
+					<p class="fragment">1. name (required)</p>
+					<p class="fragment">2. type (required)</p>
+					<p class="fragment">3. modifier (optional)</p>
+					<p class="fragment">3. attributes (optional)</p>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						model User {
+							id    Int     @default(autoincrement()) @id
+							email String  @unique
+							name  String?
+						  }
+					  </code></pre>
 				</section>
 				<section id="fragments">
-					<p>When conditional types act on a generic type, they become distributive when given a union type. For example, take the following:</p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type ToArray<Type> = Type extends any ? Type[] : never;
-					</script></code></pre>
-					<aside class="notes"> 
-						If we plug a union type into ToArray, then the conditional type will be applied to each member of that union.
-					  </aside>
+					<p> frequent fields types:</p>
+					<p class="fragment">Int</p>
+					<p class="fragment">String</p>
+					<p class="fragment">Boolean</p>
+					<p class="fragment">DateTime</p>
 				</section>
 				<section id="fragments">
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type ToArray<Type> = Type extends any ? Type[] : never;
-							type StrArrOrNumArr = ToArray<string | number>;
-					</script></code></pre>
-					<p class="fragment">  type StrArrOrNumArr = string[] | number[] </p>
+					<p> less frequent fields types:</p>
+					<p class="fragment">BigInt</p>
+					<p class="fragment">Float</p>
+					<p class="fragment">Decimal</p>
+					<p class="fragment">DateTime</p>
+					<p class="fragment">Json</p>
+					<p class="fragment">Bytes</p>
+					<p class="fragment">Unsupported("")</p>
 				</section>
 				<section>
-					<p>Lets try to create a type that exclude from a type those types that are not assignable to another type: </p>
-					<pre  class="fragment data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyExclude<T,U> = T extends U ? T : never;
-					</script></code></pre>
-					<aside class="notes"> 
-						remmember type "exclude"? this is it.
-
-						In TypeScript, never is treated as the “no value” type. You will often see it being used as a dead-end type. 
-						A union type like string | never in TypeScript will evaluate to string, discarding never.
-					  </aside>
-				</section>
-				<section> 
-					<p>How to make it [non-distributive]</p>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyExclude<T,U> = [T] extends [U] ? T : never;
-					</script></code></pre>
-					<aside class="notes"> 
-						remmember type "exclude"? this is it.
-	
-						Here we have the type "never" again. As you remmember never in a "no-type" so if we 
-						return never as a part of a union typescript will omit it.
-					  </aside>
-				</section>
-				<section>
-					<p>the infer keyword</p>
-					<p>Infer allows us to define a variable within our constraint to be referenced or returned.</p>
-					<aside class="notes"> 
-						The infer keyword compliments conditional types and cannot be used outside an extends clause. 
-						Infer allows us to define a variable within our constraint to be referenced or returned.
-					  </aside>
+					<h4>Model Relationships</h4>
 				</section>
 				<section id="fragments">
-					<p>for example:</p>
-					<pre  data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type InferSomething<T> = T extends infer U ? U: any
-					</script></code></pre>
-					<pre  data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type Inffered = InferSomething<"I am a string">
-					</script></code></pre>
-					<p class="fragment"> In this example typescript will assign type T into type U and return it</p>
-					<p class="fragment" >what would be the type of Inffered?</p>
+					<p>another type you can references is another model type. </p>
 				</section>
 				<section>
-					<p>Infer a part of a type</p>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type InferSomething<T> = T extends {a: infer A, b: number} ? A: any
-					</script></code></pre>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type Inffered = InferSomething<{a: string, b: number}>
-					</script></code></pre>
-					<p class="fragment"> In this example if type T extends the object, typescript would assign the type of a into A and return it</p>
+					<p>this is a one-to-many relationships - each user can have many posts, but each post can have only one user</p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="2 | 5 | 13 -14">
+						model User {
+							id    Int     @default(uuid()) @id
+							email String  @unique
+							name  String?
+							posts Post[]
+						  }
+						  
+						  model Post {
+							id    Int     @default(uuid()) @id
+							title     String
+							content   String?
+							published Boolean? @default(false)
+							author    User?    @relation(fields: [authorId], references: [id])
+							authorId  Int?
+						  }
+					  </code></pre>
 				</section>
 				<section>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type Inffered = InferSomething<{a: string}>
-					</script></code></pre>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type Inffered = InferSomething<{a: string, b:boolean}>
-					</script></code></pre>
-					<p class="fragment">what about this?</p>
-					<p class="fragment">any</p>
-				</section>
-				<section>
-					<p>Infer a part of a type</p>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type InferSomething<T> = T extends {a: infer A, b: infer B} ? A & B : any 
-					</script></code></pre>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type Inffered = InferSomething<{a: string, b: boolean}>
-					</script></code></pre>
-					<p class="fragment" >what would be the type of Inffered?</p>
-					<p class="fragment" >never</p>
-				</section>
-				<section>
-					<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type Inffered = InferSomething<{a: {a:string}, b: {b: boolean}}>
-					</script></code></pre>
-					<p class="fragment">what about this?</p>
-					<p class="fragment">{ a: string; } & {b: boolean;}</p>
-				</section>
-				<section>
-					<p>More examples:</p>
-				</section>
-				<section id=fragments>
-					<p>Function’s first argument:</p>
-					<pre  class="fragment data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-				type GetFirstArgumentOfAnyFunction<T> = T extends (
-					first: infer FirstArgument,
-					...args: any[]
-					) => any
-					? FirstArgument
-					: never
-						</script></code></pre>
-						<p class="fragment">
-							type t = 
-							GetFirstArgumentOfAnyFunction<(name: string, age: number) => void> // string
-						</p>
-					</section>
-					<section>
-						<p>Function’s second argument:</p>
-						<pre  class="fragment data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-					type GetSecondArgumentOfAnyFunction<T> = T extends (
-						first: any,
-						second: infer SecondArgument,
-						...args: any[]
-						) => any
-						? SecondArgument
-						: never
-							</script></code></pre>
-							<p class="fragment">
-								type t = GetSecondArgumentOfAnyFunction<(name: string, age: number) => void> // number
-							</p>
-						</section>
-					<section>
-						<p>Return type:</p>
-						<pre  class="fragment data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-							type GetReturnType<Type> = 
-							Type extends (...args: any[]) => infer Return
-								? Return
-								: never;
-							</script></code></pre>
-							<p class="fragment">
-								type Num = GetReturnType<() => number>; // number
-							</p>
-							<aside class="notes"> 
-								We can write some useful helper type aliases using the infer keyword. For example, for simple cases, 
-								we can extract the return type out from function types:
-							  </aside>
-						</section>
-					<section>
-						<p>Promise return type:</p>
-						<pre  class="fragment data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type PromiseReturnType<T> =
-							T extends Promise<infer Return> ? Return : T
-							</script></code></pre>
-							<p class="fragment">
-								type t = PromiseReturnType<Promise<string>> // string 
-							</p>
-					</section>
-					<section>
-						<p>Array type:</p>
-						<pre  class="fragment data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-							type Flatten<T> = 
-								T extends any[] ? T[number] : T;
-							</script></code></pre>
+					<p>this is a many-to-many relationships - each category can have many posts, and each post can have many categories </p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="17 | 22">
+						  // User ...
 
-						<pre  class="fragment data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-							type Flatten<Type> = 
-								Type extends Array<infer Item> ? Item : Type;
-							</script></code></pre>
-							<p class="fragment">
-								type t = Flatten<[string, number]> // string | number
-							</p>
+						  model Post {
+							id    Int     @default(uuid()) @id
+							title     String
+							content   String?
+							published Boolean? @default(false)
+							author    User?    @relation(fields: [authorId], references: [id])
+							authorId  Int?
+							categories Category[]
+						  }
 
-							<aside class="notes"> 
-								Here, we used the infer keyword to declaratively introduce a new generic type variable named Item instead of specifying how to retrieve the element type of T within the true branch.
-								This frees us from having to think about how to dig through and probing apart the structure of the types we’re interested in.
-							  </aside>
-						</section>
-				<section>
-					<p> Assinment: </p>
-					<p>1. Rewrite the Extract type:  Constructs a type by extracting from Type all union members that are assignable to Union. </p>
-				 	<p>2. Rewrite the ReturnType type : Constructs a type consisting of the return type of function Type.</p>
-					<aside class="notes"> 
-						type Extract<T, U> = T extends U ? T : never
-						type ReturnType<Type> = Type extends (...args: any[]) => infer R ? R: any;
-					  </aside>
+						  model Category {
+							id    Int     @default(uuid()) @id
+							post Post[]
+						  }
+					  </code></pre>
 				</section>
 				<section>
-					<p>Solutions: </p>
-					<p>Extract: </p>
-					<pre  data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type Extract<T, U> = T extends U ? T : never
-					</script></code></pre>
-					<p>ReturnType: </p>
-					<pre  data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type ReturnType<T> = Type extends (...args: any[]) => infer R ? R: any;
-					</script></code></pre>
-					<pre  class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
-					</script></code></pre>
-				</section>			
+					<p>this is a one-to-one relationships - each User can have one UserPreference, and each UserPreference can have one User </p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="15 | 20">
+						model User {
+							id    Int     @default(uuid()) @id
+							email String  @unique
+							name  String?
+							posts Post[]
+							userPreference UserPreference?
+						  }
+
+						  model UserPreference {
+							id    Int     @default(uuid()) @id
+							emailUpdates Boolean[]
+							user User @relation(fields[userId], references:[id])
+							userId String @unique
+						  }
+					  </code></pre>
+				</section>
+				<section>
+					<h4>attributes</h4>
+				</section>
+				<section id="fagments">
+					<p>relation field level attributes:</p>
+					<p class="fragment">@default</p>
+					<p class="fragment"> @id</p>
+				</section>
+				<section id="fagments">
+					<p> non relation field level attributes:</p>
+					<p class="fragment">@unique - every single data in this field have to be unique</p>
+					<p class="fragment">@updatedAt - set automatically the field with the current time </p>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="3 | 11">
+						model User {
+							id    Int     @default(uuid()) @id
+							email String  @unique
+							name  String?
+							posts Post[]
+						  }
+
+						model Post {
+						  id    Int     @default(uuid()) @id
+						  title     String
+						  updatedAt DateTime  @updatedAt
+						  content   String?
+						  published Boolean? @default(false)
+						  author    User?    @relation(fields: [authorId], references: [id])
+						  authorId  Int?
+						  categories Category[]
+						}
+					</code></pre>
+				</section>
+				<section id="fagments">
+					<p> block level attributes:</p>
+					<p class="fragment">@@unique - set an array of multiple unique values </p>
+					<p class="fragment">@@Index -set an index for a values - helps with performance </p>
+					<p class="fragment">@@id- set an id based on other values - TODO REACHECK</p>
+				</section>
+				<section>
+					<h4>Enums</h4>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="8 - 11 | 6">
+						model User {
+							id    Int     @default(uuid()) @id
+							email String  @unique
+							name  String?
+							posts Post[]
+							role Role @default(BASIC)
+						  }
+						 enum Role {
+							BASIC
+							ADMIN
+						 } 
+					</code></pre>
+				</section>
 			</section>
 			<section>
-				<section>Mapped Types </section>
-				<section> 
-					<p> When you don’t want to repeat yourself, sometimes a type needs to be based on another type. </p>
-				</section>
+
 				<section>
-					<p>Consider this example:</p>
-					<aside class="notes"> 
-						The in keyword is used there as part of the syntax to iterate over all the items in a union of keys.
-					  </aside>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type Properties = "prop A" | "prop B"
-					</script></code></pre>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyMappedType = {
-							[P in Properties] : boolean 
-						}
-					</script></code></pre>
-					<p class="fragment"> what would be the type of MyMappedType? </p>
-				</section>
-				<section>
-					<aside class="notes"> 
-						Well it doesnt make sence...
-						lets make it generic
-					  </aside>
-					<pre data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyMappedType = {
-							"prop A": boolean;
-							"prop B": boolean;
-						}
-					</script></code></pre>
-				</section>
-				<section> 
-					<p>A mapped type is a generic type which uses a union of PropertyKeys (frequently created via a keyof) to iterate through keys to create a type:</p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type OptionsFlags<Type> = {
-							[Property in keyof Type]: boolean;
-						  };
-					</script></code></pre>
-					<aside class="notes"> 
-						in this example, OptionsFlags will take all the properties from the type Type and change their values to be a boolean.
-					  </aside>
-				</section>
-				<section>
-					<p>for example: </p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-					type FeatureFlags = {
-						darkMode: () => void;
-						newUserProfile: () => void;
-					  };
-					   
-					  type FeatureOptions = OptionsFlags<FeatureFlags>;
-					</script></code></pre>
-					<p class="fragment">What is the type of FeatureOptions?</p>
-					<div class="fragment">
-						type FeatureOptions = {
-							darkMode: boolean;
-							newUserProfile: boolean;
-						}
-					</div>
-				</section>
-				<section>
-					<pre  data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyMappedType<T> = {
-							[P in keyof T]: T[P]
-						}
-						</script></code></pre>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-							type MyType = MyMappedType<{a:"a", b:"b"}>
-						</script></code></pre>
-						<p class="fragment"> what would be the value of MyType? </p>
-						<p class="fragment">{a:"a", b:"b"}</p>
+					<h4>Psirma Studio</h4>
 				</section>
 				<section id="fragments">
-					<p> lets try to create the Record type</p>
-					<p class="fragment"> Constructs an object type whose property keys are Keys and whose property values are Type. This utility can be used to map the properties of a type to another type.  </p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type Record<K extends keyof any, T> = {
-							[P in K]: T
-						}
-					</script></code></pre>
+					<p>Inorder to interact with your data you can either use a DB GUI (like robo3t, compass or pgAdmin)</p>
+					<p class="fragment">These are spesfic DB GUI's</p>
+					<p class="fragment">or, use can you the prisma studio which is a prisma DB agnostic GUI</p>
 				</section>
 				<section>
-					<p> FYI</p>
-					<p class="fragment"> Record type gives an ability to describe type that has some amount of keys with the same value type </p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						Record<string, number>  ===  interface Record { [key:string: number] }
-					</script></code></pre>
+					<p>npx prisma studio</p>
 				</section>
-				<section>
-				 <p> Assignment: </p>	
-				 <p> 1. Create a generic type that receives a type and returns the same type but with all its keys as optional (Partial) </p>	
-				 <p> 2. Create a generic type that receives a type and returns the same type but with all its keys as readonly (Readonly) </p>	
-				 <p> 3. Create a generic type that receives a type and returns the same type but with all its keys as nullable </p>	
-				 <p> 4. Create a generic type gives the ability to create a new type by picking properties from the already existing model (Pick) </p>
-				</section>
-				<section>
-					Bonus: Create a generic type that receives a type and returns the same type but with all its keys as readonly (nested types too) 
-				</section>
-				<section>
-					<p>Answer 1:</p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyMappedType<T> = {
-							[P in keyof T]?: T[P]
-						}
-					</script></code></pre>
-				</section>
-				<section>
-					<p>Answer 2:</p>
-					<pre class="fragment" data-id="code-animation" ><code  data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyMappedType<T> = {
-							readonly[P in keyof T]: T[P]
-						}
-					</script></code></pre>
-				</section>
-				<section>
-					<p>Answer 3:</p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type MyMappedType<T> = {
-							[P in keyof T]: T[P] | null
-						}
-					</script></code></pre>
-				</section>
-				<section>
-					<p>Answer 4:</p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type Pick<T, K extends keyof T> = {
-							[P in K]: T[P];
-						};
-					</script></code></pre>
-				</section>
-				<section>
-					<p>Bonus:</p>
-					<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-						type DeepReadonly<T> = {
-							readonly [P in keyof T]: DeepReadonly<T[P]>;
-						};
-					</script></code></pre>
-				</section>
-			</section>
-			<section id="fragments">
-			<section>
-
-				<p> Template Literal Types </p>	
-				<aside class="notes"> 
-					Template literal types build on string literal types, and have the ability to expand into many strings via unions.
-					
-					They have the same syntax as template literal strings in JavaScript, but are used in type positions. 
-					When used with concrete literal types, a template literal produces a new string literal type by concatenating the contents.
-				</aside>
-				<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-					type World = "world";
-					
-					type Greeting = `hello ${World}`;
-				</script></code></pre>
-				<p class="fragment"> type Greeting = "hello world" </p>
-				<aside class="notes"> 
-					With Template literal types toy can dynamically create new static types!
-				  </aside>
-			</section>
-			<section>
-				<p>I can also: </p>
-				<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-					type Greeting = `hello ${string}`;
-				</script></code></pre>
-			</section>
-			<section>
-				<p> Another  example: </p>
-				<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-					type CSSValue = number | `${number}px` | ${number}em | ${number}rem
-				</script></code></pre>
-			</section>
-				<section  id="fragments" data-background-color="white" data-background-iframe="https://www.typescriptlang.org/play?#code/C4TwDgpgBACgTgezAUQG4QHbAMoIK5wDGEAPACrgQB8UAvFAN4BQUrUCGJA0hCFBAA9gmACYBnKGOBwAlhgDmUAGRQA1rwQAzKBUhUWbQwAoI6LADkAhgFsIALigADACQMeIAL4BhABaWFECKOADRQhJYANhEARpaEqg5GGBAA7gBqkXj2OpQA2u4AugCUdDSoCDIiUEUO5ZUA3EwejUwiEIQRlnDQmngYhMAyHFDWluoA6pbAhD6BAPLRAFbtwOSUVEYISw66EDU5kMqwiChmOPhEpLtULYQcUlCQcGLD9KMTUzPzSytGzKyaGTPYBWWwOABE2EsFWeEHBwQMnSkoOy4IAShx-PCDJZ5NkAEwANiaRRaTxeGAAdBwjODAcCUb5-HiRPCoMkUijSowDKwAPR8wxC4Ui1gAPQA-LywvcEBEIJSIgh5EZHBz2TZoDIJK4OSjKcAEABVMBPLyWMQQIxFDyOUkkskQZ4cakYWm4iBMgKs0IcgCCeO5-zYAtFYagkulMm0SVSAegJCgAAYSsHhXcMC95ZSUl03eDc3AMHJ5ABCdkQeRTGToKAe8H2wweElAA" data-background-interactive></section>
-			<section>
-				<p>When a union is used in the interpolated position, the type is the set of every possible string literal that could be represented by each union member:</p>
-				<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-					type EmailLocaleIDs = "welcome_email" | "email_heading";
-					type FooterLocaleIDs = "footer_title" | "footer_sendoff";
-					 
-					type AllLocaleIDs = `${EmailLocaleIDs | FooterLocaleIDs}_id`;
-				</script></code></pre>
-				<p class="fragment"> type AllLocaleIDs = "welcome_email_id" | "email_heading_id" | "footer_title_id" | "footer_sendoff_id" </p>
-			</section>
-			<section>
-				<p>For each interpolated position in the template literal, the unions are cross multiplied:</p>
-				<pre class="fragment" data-id="code-animation" ><code data-trim data-noescape class="hljs">	<script type="text/template">
-					type AllLocaleIDs = `${EmailLocaleIDs | FooterLocaleIDs}_id`;
-					type Lang = "en" | "ja" | "pt";
-					 
-					type LocaleMessageIDs = `${Lang}_${AllLocaleIDs}`;
-				</script></code></pre>
-				<p class="fragment">
-					type LocaleMessageIDs = "en_welcome_email_id" | "en_email_heading_id" | "en_footer_title_id" | "en_footer_sendoff_id" | "ja_welcome_email_id" | "ja_email_heading_id" | "ja_footer_title_id" | "ja_footer_sendoff_id" | "pt_welcome_email_id" | "pt_email_heading_id" | "pt_footer_title_id" | "pt_footer_sendoff_id"
-				</p>
-			</section>
-			<section>
-				<a href="https://github.com/ghoullier/awesome-template-literal-types">awesome-template-literal-types</a>
-			</section>
-			</section>
-			<section>
-				<h4>Typescript Tips and Tricks</h4>
-			</section>
-			<section>
-				<h4>Mutable vs. Immutable</h4>
-				<ul>
-					<li>Predictability</li>
-					<li>Performance</li>
-					<li>Mutation tracking</li>
-				</ul>
-			</section>
-			<section>
-				<pre><code class="language-typescript" data-noescape data-trim>
-					const user = {
-						firstnname: 'Hatul',
-						lastname: 'Hatuli'
-					}
-					function checkValidityAndFireRockets(u: typeof user){
-						if(u.firstnname && u.lastname){
-							u.firstnname = u.firstnname.toLowerCase();
-							return user;
-						}
-					
-						return null;
-					}
-					const validatedUser = checkValidityAndFireRockets(user);
-					console.log(user === validatedUser);
-					console.log(user.firstnname === 'Hatuli');
-				</code></pre>
-			</section>
-			<section>
-				<img src="../../assets/i-see.jpeg" />
-			</section>
-			<section>
-				<h2>Deep readonly! 🙌</h2>
-				<pre><code class="language-typescript" data-noescape data-trim>
-					type DeepReadonly<T> = {
-						readonly [P in keyof T]: DeepReadonly<T[P]>;
-					};
-				</code></pre>
-			</section>
-			<section>
-				<pre><code class="language-typescript" data-noescape data-trim>
-					const user = {
-						firstnname: 'Hatul',
-						lastname: 'Hatuli'
-					}
-					type ReadonlyUser = DeepReadonly&lt;typeof user>;
-					function checkValidityAndFireRockets(u: ReadonlyUser) {
-						if (u.firstnname && u.lastname) {
-							u.firstnname = u.firstnname.toLowerCase(); // Cannot assign to 'firstnname' because it is a read-only property.
-							return user;
-						}
-						return null;
-					}
-					const validatedUser = checkValidityAndFireRockets(user);
-					console.log(user === validatedUser);
-					console.log(user.firstnname === 'Hatuli');
-				</code></pre>
-			</section>
-			<section>
-				<h2>type narrowing</h2>
-				<pre><code class="language-typescript" data-noescape="" data-trim="">
-					class User{
-						firstname?:string;
-						lastname: string;
-					}
-				</code></pre>
-				<img class="fragment" style="width:600px" src="../../assets/narrowing1.png" />
-			</section>
-			<section>
-				
 			</section>
 			</div>
 		</div>

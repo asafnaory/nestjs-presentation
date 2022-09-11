@@ -314,7 +314,42 @@
             <p>It follows Single Threaded with Event Loop Model.</p>
             <p></p>
           </section>
-       </section>
+          <section>
+            <p>there are edge-cases when request-based lifetime may be the desired behavior, for instance per-request caching in GraphQL applications, request tracking, and multi-tenancy. Injection scopes provide a mechanism to obtain the desired provider lifetime behavior. </p>
+          </section>
+          <section>
+            <h4>Provider scope</h4>
+          </section>
+          <section id="fragments">
+            <p>DEFAULT</p>
+            <p class="fragment">
+              A single instance of the provider is shared across the entire application. The instance lifetime is tied directly to the application lifecycle. Once the application has bootstrapped, all singleton providers have been instantiated. Singleton scope is used by default.
+            </p>
+          </section>
+          <section id="fragments">
+            <p>REQUEST</p>
+            <p class="fragment">
+              A new instance of the provider is created exclusively for each incoming request. The instance is garbage-collected after the request has completed processing.
+            </p>
+          </section>
+          <section id="fragments">  
+            <p>TRANSIENT</p>
+            <p class="fragment">
+              Transient providers are not shared across consumers. Each consumer that injects a transient provider will receive a new, dedicated instance.
+            </p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-20 | 7-11">
+              import { Injectable, Scope } from '@nestjs/common';
+
+              @Injectable({ scope: Scope.REQUEST })
+              export class CatsService {}
+            </code></pre>
+            </section>
+            <section>
+              <p>Using request-scoped providers will have an impact on application performance. While Nest tries to cache as much metadata as possible, it will still have to create an instance of your class on each request. Hence, it will slow down your average response time and overall benchmarking result. Unless a provider must be request-scoped, it is strongly recommended that you use the default singleton scope.</p>
+            </section>
+          </section>
       </div>
     </div>
 
