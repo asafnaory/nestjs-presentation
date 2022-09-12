@@ -332,11 +332,19 @@
               A new instance of the provider is created exclusively for each incoming request. The instance is garbage-collected after the request has completed processing.
             </p>
           </section>
+          <section id="fragments">
+            <h4>use cases</h4>
+            <p class="fragment">Let's say we need to configure a Provider with data that is defined per request, perhaps with information from the Header of every given request.</p>
+          </section>
           <section id="fragments">  
             <p>TRANSIENT</p>
             <p class="fragment">
               Transient providers are not shared across consumers. Each consumer that injects a transient provider will receive a new, dedicated instance.
             </p>
+          </section>
+          <section id="fragments">
+            <h4>use cases</h4>
+            <p class="fragment">let's say we need a Provider to keep some state that is unique to the consumer of that provider (where it is injected).</p>
           </section>
           <section>
             <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-20 | 7-11">
