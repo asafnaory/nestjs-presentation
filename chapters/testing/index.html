@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="../../dist/reset.css">
+		<link rel="stylesheet" href="../../dist/reveal.css">
+		<link rel="stylesheet" href="../../dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../../plugin/highlight/monokai.css">
+	</head>
+	<style>
+		.reveal {
+			background-color: black
+		}
+	</style>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+			<section>
+				<h4>Testing</h4>
+			</section>
+			<section>
+				<h4>Jest</h4>
+				<p>Jest Image</p>
+			</section>
+			<section>
+				<p>out of the box</p>
+				<p>$npm run test - for unit tests</p>
+				<p>$npm run test:cov - for test coverage</p>
+				<p>$npm run test:e2e - for e2e tests</p>
+			</section>
+			</div>
+		</div>
+
+		<script src="../../dist/reveal.js"></script>
+		<script src="../../plugin/notes/notes.js"></script>
+		<script src="../../plugin/markdown/markdown.js"></script>
+		<script src="../../plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
+
+
+
+<!-- <pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
+				
+</script></code></pre> -->
