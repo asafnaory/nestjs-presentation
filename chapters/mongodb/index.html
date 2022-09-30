@@ -24,12 +24,32 @@
 <body>
     <div class="reveal">
         <div class="slides">
+            <section>
+                <h4>connection to DB</h4>
+            </section>
+            <section>
+				<h4>Docker</h4>
+			</section>
+			<section>
+				<iframe width="1000" height="650" src="https://www.youtube.com/embed/Gjnup-PuquQ">
+				</iframe>
+			</section>
+            <section>
+                <h4>Mongo DB</h4>
+            </section>
+            <section>
+                <iframe width="1000" height="650" src="https://www.youtube.com/embed/-bt_y4Loofg">
+                </iframe>
+            </section>
            <section>
                 <section>What is MongoDB?</section>
                 <section>
                     <p>MongoDB is a schema-less NoSQL document database. It means you can store JSON documents in it, and the structure of these documents can vary as it is not enforced like SQL databases. This is one of the advantages of using NoSQL as it speeds up application development and reduces the complexity of deployments.</p>
                 </section>
            </section>
+           <section>
+            <h4>TODO mongodb setup with docker and compass</h4>
+            </section>
            <section>
                <section>What is Mongoose</section>
                <section>
@@ -80,24 +100,25 @@
             <p class="fragment">docker run --name mongo -p 27017:27017 -d mongo </p>
         </section>
         <section>
-            <p>connect to mongodb in nest app</p>
-            <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 8">
+            <section>
+                <h4> Interacting with mongodb via mongoose in nestjs</h4>
+            </section>
+            <section>
+                <p>npm i @nestjs/mongoose mongoose</p>
+            </section>
+            <section>
+            <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 2 | 6">
                 import { Module } from '@nestjs/common';
-                import { MongooseModule} from '@nestjs/mongoose';
-                import { AppController } from './app.controller';
-                import { AppService } from './app.service';
-      
+                import { MongooseModule } from '@nestjs/mongoose';
+
                 @Module({
-                    imports: [
-                      MongooseModule.forRoot('mongodb://localhost:27017/nest-course'),
-                    ],
-                    controllers: [AppController],
-                    providers: [AppService],
-                  })
-                  export class AppModule {}
+                imports: [
+                    MongooseModule.forRoot('mongodb://localhost:27017/nest-course'),
+                ],
+                })
+                export class AppModule {}
               </code></pre>
         </section>
-        <section>
             <section>
                 <h4>Creating a Mongoose Model </h4>
             </section>
@@ -107,7 +128,7 @@
             </section>
             <section id="fragments">
                 <p>Schema</p>
-                <pre><code class="typescript-language" data-trim data-noescape>
+                <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 4 | 6 |11">
                     import { Schema ,Prop, SchemaFactory } from "@nestjs/mongoose";
                     import { Document, Types } from 'mongoose';                    
                     
@@ -121,6 +142,24 @@
                     export const CatSchema = SchemaFactory.createForClass(Cat)
                   </code></pre>
                   <p class="fragment"> mongo creates all collections plural and lower case by default. entity Cat wll be collection cats</p>
+            </section>
+            <section id="fragments">
+                <p >@Schema(): marks a class as a schema definition. It maps our Cat class to a MongoDB collection of the same name, but with an additional “s” at the end - so the final mongo collection name will be cats</p>
+                <p class="fragment">@Prop():  decorator defines a property in the document.</p>
+            </section>
+            <section>
+                <p>The schema types for these properties are automatically inferred thanks to TypeScript metadata (and reflection) capabilities. However, in more complex scenarios in which types cannot be implicitly reflected (for example, arrays or nested object structures), types must be indicated explicitly, as follows:</p>
+                <pre><code class="typescript-language" data-trim data-noescape>
+                    @Prop([String])
+                    tags: string[];
+                  </code></pre>
+            </section>
+            <section>
+                <p>@Prop(): accepts an options object argument for example whether a property is required or not, specify a default value, or mark it as immutable.</p>
+                <pre><code class="typescript-language" data-trim data-noescape>
+                    @Prop({ required: true })
+                    name: string;
+                  </code></pre>
             </section>
             <section>
                 <section>
@@ -145,19 +184,19 @@
                 <section>
                     <p>cats.service.ts</p>
                     <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 |3-8">
-                        import { Injectable } from '@nestjs/common';
-                        import { InjectModel } from '@nestjs/mongoose';
-                        import { Model } from 'mongoose';
-                        import { Cat } from './entities/cat.entity';
-                        export class PlayersService {
-                            constructor(
-                              @InjectModel(Cat.name) private readonly catModel: Model<Cat>,
-                            ) {} 
-                            async getAllCats(): Promise<Cat[]> {
-                                return await this.catModel.find();
-                              }
-                              // ...
-                        }
+                    import { Injectable } from '@nestjs/common';
+                    import { InjectModel } from '@nestjs/mongoose';
+                    import { Model } from 'mongoose';
+                    import { Cat } from './entities/cat.entity';
+                    export class PlayersService {
+                        constructor(
+                            @InjectModel(Cat.name) private readonly catModel: Model<Cat>,
+                        ) {}
+                        async getAllCats(): Promise<Cat[]> {
+                            return await this.catModel.find();
+                            }
+                            // ...
+                    }
                     </code></pre>
                 </section>
             </section>
@@ -212,6 +251,9 @@
                     
                     export const CatSchema = SchemaFactory.createForClass(Cat)
                   </code></pre>
+            </section>
+            <section>
+                <p> note: pay attention - you can not use referenced relationships from both ways, because it will create a circular reference issue</p>
             </section>
         </section>
         </div>
