@@ -33,6 +33,10 @@
           <iframe width="1000" height="650" src="https://www.youtube.com/embed/yunF2PgJlHU">
           </iframe>
       </section>
+        <section>
+          <iframe width="1000" height="650" src="https://www.youtube.com/embed/vYFhHVMetPg">
+          </iframe>
+      </section>
        <section>
          <p>Dependency injection is basically providing the objects that an object needs (its dependencies) instead of having it construct them itself. It's a very useful technique for testing, since it allows dependencies to be mocked or stubbed out.</p>
        </section>
@@ -226,7 +230,7 @@
         <h4>Class Providers</h4>
       </section>
       <section>
-        <pre class="fragment"><code class="typescript-language" data-trim data-noescape data-line-numbers="1-20 | 10-15 ">
+        <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-20 | 10-15 ">
           import { Module } from '@nestjs/common';
           import { CatsController } from './cats.controller';
           import { CatsService } from './cats.service';
@@ -311,8 +315,85 @@
        </section>
        <section>
         <section>
-          <h4>Dynamic Module</h4>
+          <h4>Dynamic Modules</h4>
         </section>
+        <section id="fragments">
+          <p>We have already talked about "regular" modules, but what if we want to configure our modules at runtime</p>
+          <p class="fragment">Consider the case where we have a general purpose module that needs to behave differently in different use cases. This is analogous to the concept of a "plugin" in many systems, where a generic facility requires some configuration before it can be used by a consumer.</p>
+        </section>
+        <section id="fragments">
+          <p>Using dynamic module features, we can make our configuration module dynamic so that the consuming module can use an API to control how the configuration module is customized at the time it is imported.</p>
+          <p class="fragment">In other words, dynamic modules provide an API for importing one module into another, and customizing the properties and behavior of that module when it is imported, as opposed to using the static bindings we've seen so far.</p>
+        </section>
+        <section id="fragments">
+          <h4>The example: </h4>
+          <p class="fragment"> Our requirement is to make ConfigModule accept an options object to customize it</p>
+          <p class="fragment"> imagine you want to store your various .env files in a folder under the project root called config (i.e., a sibling folder to src).</p>
+          <p class="fragment"> You'd like to be able to choose different folders when using the ConfigModule in different projects.</p>
+        </section>
+        <section id="fragments">
+          <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 7">
+            import { Module } from '@nestjs/common';
+            import { AppController } from './app.controller';
+            import { AppService } from './app.service';
+            import { ConfigModule } from './config/config.module';
+            
+            @Module({
+              imports: [ConfigModule.register({ folder: './config' })],
+              controllers: [AppController],
+              providers: [AppService],
+            })
+            export class AppModule {}
+          </code></pre>
+          <p class="fragment">The register() method is defined by us, so we can accept any input arguments we like.</p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 ">
+              import { DynamicModule, Module } from '@nestjs/common';
+              import { ConfigService } from './config.service';
+              
+              @Module({})
+              export class ConfigModule {
+                static register(options: Record<string, any>): DynamicModule {
+                  return {
+                    module: ConfigModule,
+                    providers: [
+                      {
+                        provide: 'CONFIG_OPTIONS',
+                        useValue: options,
+                      },
+                      ConfigService,
+                    ],
+                    exports: [ConfigService],
+                  };
+                }
+              }
+            </code></pre>
+            <p class="fragment">DynamicModule is an object with properties which are essentially the same as those that we've provided as metadata via the @Module() decorator.</p>
+          </section>
+          <section>
+            <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 ">
+              import * as dotenv from 'dotenv';
+              import * as fs from 'fs';
+              import { Injectable, Inject } from '@nestjs/common';
+              import { EnvConfig } from './interfaces';
+              
+              @Injectable()
+              export class ConfigService {
+                private readonly envConfig: EnvConfig;
+              
+                constructor(@Inject('CONFIG_OPTIONS') private options: Record<string, any>) {
+                  const filePath = `${process.env.NODE_ENV || 'development'}.env`;
+                  const envFile = path.resolve(__dirname, '../../', options.folder, filePath);
+                  this.envConfig = dotenv.parse(fs.readFileSync(envFile));
+                }
+              
+                get(key: string): string {
+                  return this.envConfig[key];
+                }
+              }
+            </code></pre>
+          </section>
        </section>
        <section>
          <section>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="../../dist/reset.css">
+		<link rel="stylesheet" href="../../dist/reveal.css">
+		<link rel="stylesheet" href="../../dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../../plugin/highlight/monokai.css">
+		<style>
+			.reveal {
+				background-color: black
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h4>Authorization</h4>
+				</section>
+				<section id="fragments">
+					<p>Authorization refers to the process that determines what a user is able to do. For example, an administrative user is allowed to create, edit, and delete posts. A non-administrative user is only authorized to read the posts.</p>
+					<p class="fragment">authorization requires an authentication mechanism.</p>
+				</section>
+				<section>
+					<section>
+						<h4>Basic RBAC implementation </h4>
+					</section>
+					<section>
+						<p>Role-based access control (RBAC) is a policy-neutral access-control mechanism defined around roles and privileges. In this section, we'll demonstrate how to implement a very basic RBAC mechanism using Nest guards.</p>
+					</section>
+					<section>
+						<p>First, let's create a Role enum representing roles in the system:</p>
+						<p>role.enum.ts</p>
+						<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 ">
+							export enum Role {
+								User = 'user',
+								Admin = 'admin',
+							}
+						</code></pre>
+					</section>
+						<section>
+							<p>With this in place, we can create a @Roles() decorator. This decorator allows specifying what roles are required to access specific resources.</p>
+							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 ">
+								// roles.decorator.ts
+								import { SetMetadata } from '@nestjs/common';
+								import { Role } from '../enums/role.enum';
+								
+								export const ROLES_KEY = 'roles';
+								export const Roles = (...roles: Role[]) => SetMetadata(ROLES_KEY, roles);
+							</code></pre>
+						</section>
+						<section>
+							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 ">
+								//cats.controller.ts
+								@Post()
+								@Roles(Role.Admin)
+								create(@Body() createCatDto: CreateCatDto) {
+								  this.catsService.create(createCatDto);
+								}
+							</code></pre>
+						</section>
+						<section id="fragments">
+							<p>Finally, we create a RolesGuard class which will compare the roles assigned to the current user to the actual roles required by the current route being processed</p>
+							<p class="fragment">In order to access the route's role(s) (custom metadata), we'll use the Reflector helper class, which is provided out of the box by the framework and exposed from the @nestjs/core package</p>
+						</section>
+						<section id="fragments">
+							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30| 3 | 10-13 | 17">
+								//roles.guard.ts
+								import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+								import { Reflector } from '@nestjs/core';
+								
+								@Injectable()
+								export class RolesGuard implements CanActivate {
+								  constructor(private reflector: Reflector) {}
+								
+								  canActivate(context: ExecutionContext): boolean {
+									const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+									  context.getHandler(),
+									  context.getClass(),
+									]);
+									if (!requiredRoles) {
+									  return true;
+									}
+									const { user } = context.switchToHttp().getRequest();
+									return requiredRoles.some((role) => user.roles?.includes(role));
+								  }
+								}
+							</code></pre>
+							<p class="fragment">we have the user property from the "validate" method in the jwt strategy class</p>
+						</section>
+						<section>
+							<p> now we can use @UseGuards(RolesGuard) on and route (controller) we want to guard </p>
+						</section>
+				</section>
+				</div>
+		</div>
+
+		<script src="../../dist/reveal.js"></script>
+		<script src="../../plugin/notes/notes.js"></script>
+		<script src="../../plugin/markdown/markdown.js"></script>
+		<script src="../../plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
