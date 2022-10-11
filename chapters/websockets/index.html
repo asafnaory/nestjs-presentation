@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="../../dist/reset.css">
+		<link rel="stylesheet" href="../../dist/reveal.css">
+		<link rel="stylesheet" href="../../dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../../plugin/highlight/monokai.css">
+	</head>
+	<style>
+		.reveal {
+			background-color: black
+		}
+	</style>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+			<section>
+				<h4>websockets</h4>
+			</section>
+			<section>
+				<iframe width="1000" height="650" src="https://www.youtube.com/embed/1BfCnjr_Vjg">
+				</iframe>
+			</section>
+				<section>
+					<section>
+						<h4>Concepts</h4>
+					</section>
+					<section>
+						<h4>Rooms</h4>
+					</section>
+					<section>
+						<p>A room is an arbitrary channel that sockets can join and leave. It can be used to broadcast events to a subset of clients</p>
+					</section>
+					<section>
+						<img src="../../assets/websocket-rooms.png" style="height: 500px; width: 1000px;">
+					</section>
+					<section>
+						<p>Rooms are a server-only concept (i.e. the client does not have access to the list of rooms it has joined).</p>
+						<p>Rooms: are managed in the backend, meaning the server assigns joining and leaving rooms.	</p>
+					</section>
+					<section>
+						<h4>Namespaces</h4>
+					</section>
+					<section>
+						<p>A Namespace is a communication channel that allows you to split the logic of your application over a single shared connection (also called "multiplexing").</p>
+					</section>
+					<section>
+						<img src="../../assets/websocket-namespaces.png" style="height: 500px; width: 1000px;">
+					</section>
+					<section>
+						<p>Namespaces: are managed in the frontend meaning the user, or an attacker, joins through the frontend and the joining and disconnecting is managed here</p>
+					</section>
+				</section>
+			<section>
+				<section>
+					<h4>Socket.io</h4>
+				</section>
+				<section id="fragments">
+					<p>Socket.IO is a library that enables low-latency, bidirectional and event-based communication between a client and a server.</p>
+					<p class="fragment">It is built on top of the WebSocket protocol and provides additional guarantees like fallback to HTTP long-polling or automatic reconnection.</p>
+				</section>
+				<section  id="fragments" data-background-color="white" data-background-iframe="https://socket.io/" data-background-interactive></section>
+				<section>
+					<h4>IO</h4>
+				</section>
+				<section>
+					<p>interacting with all the clients related to this connection. represents the group of sockets</p>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						io.on("connection", socket => {
+							// code ...
+						})
+					  </code></pre>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						io.emit(/* ... */);
+					</code></pre>
+					<p>to all connected clients</p>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						io.to(socketId).emit(/* ... */);
+					</code></pre>
+					<p>to all clients in room1</p>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						io.in("room1").emit(/* ... */);
+					</code></pre>
+					<p> to individual socketid (private message)</p>
+				</section>
+				<section>
+					<h4>Socket</h4>
+				</section>
+				<section>
+					<p>interacting with specific client. representing one connection</p>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						socket.emit('message', "this is a test");
+				</code></pre>
+					<p>sending to sender-client only</p>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						socket.on()
+					</code></pre>
+					<p>event listener, can be called on client to execute on server</p>
+				</section>
+				<section  id="fragments" data-background-color="white" data-background-iframe="https://socket.io/docs/v3/emit-cheatsheet/" data-background-interactive></section>
+			</section>
+			<section>
+				<section>
+					<h4>websockets in nestjs</h4>
+				</section>
+				<section id="fragments">
+					<p>In Nest, a gateway is simply a class annotated with @WebSocketGateway() decorator</p>
+					<p class="fragment"> There are two WS platforms supported out-of-the-box: socket.io and ws. You can choose the one that best suits your needs </p>
+				</section>
+				<section>
+					<img src="../../assets/websocket-gateway.png" style="height: 650px; width: 1000px;">
+				</section>
+				<section>
+					<p>npm i --save @nestjs/websockets @nestjs/platform-socket.io</p>
+				</section>
+				<section id="fragments">
+					<pre><code class="typescript-language" data-trim data-noescape>
+						@WebSocketGateway(80, { namespace: 'events' })
+					</code></pre>
+					<p class="fragment"> each gateway is listening on the same port as the HTTP server, unless your app is not a web application, or you have changed the port manually </p>
+					<p class="fragment"> You can also set a namespace used by the gateway  </p>
+				</section>
+				<section id="fragments">
+					<p>events.gateway.ts</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+					@SubscribeMessage('events')
+					handleEvent(@MessageBody() data: string): string {
+						return data;
+					}
+				</code></pre>
+				<p class="fragment">Don't forget to register it in our module as provider.</p>
+				</section>
+				<section id="fragments">
+					<p>events.gateway.ts</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						@SubscribeMessage('events')
+						handleEvent(@MessageBody('id') id: number): number {
+						  // id === messageBody.id
+						  return id;
+						}
+				</code></pre>
+				<p class="fragment">You can also pass in a property key to the decorator to extract it from the incoming message body</p>
+				</section>
+				<section id="fragments">
+					<p>events.gateway.ts</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						@SubscribeMessage('events')
+						handleEvent(
+						  @MessageBody() data: string,
+						  @ConnectedSocket() client: Socket,
+						): string {
+						  return data;
+						}
+				</code></pre>
+				<p class="fragment"> In order to access a connected socket instance, use @ConnectedSocket() decorator</p>
+				</section>
+				<section>
+						<p>events.gateway.ts</p>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							@SubscribeMessage('events')
+							handleEvent(
+							  @MessageBody() data: string,
+							  @ConnectedSocket() client: Socket,
+							): string {
+							  return data;
+							}
+					</code></pre>
+					<p class="fragment"> return is equal to socket.emit(), however, in the latter, you won't be able to leverage interceptors. </p>
+				</section>
+				<section>
+					<h4>Lifecycle hooks	</h4>
+				</section>
+				<section>
+					<h4>OnGatewayInit</h4>
+					<p>Forces to implement the afterInit() method. Takes library-specific server instance as an argument (and spreads the rest if required).</p>
+				</section>
+				<section>
+					<h4>OnGatewayConnection</h4>
+					<p>Forces to implement the handleConnection() method. Takes library-specific client socket instance as an argument.</p>
+				</section>
+				<section>
+					<h4>OnGatewayDisconnect	</h4>
+					<p>Forces to implement the handleDisconnect() method. Takes library-specific client socket instance as an argument.</p>
+				</section>
+				<section>
+					<h4>Server</h4>
+				</section>
+				<section>
+					<p>Occasionally, you may want to have a direct access to the native, platform-specific server instance</p>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						@WebSocketServer()
+						server: Server;
+				</code></pre>
+				</section>
+				<section>
+					<h4>Rooms</h4>
+				</section>
+				<section id="fragments">
+					<p> there is no expression in NestJs for room communication since this is managed via the socket for example:</p>
+					<pre class="fagment"><code class="typescript-language" data-trim data-noescape>
+						// to all clients in room1 except the sender
+						socket.to("room1").to("room2").emit(/* ... */);
+					</code></pre>
+					<pre class="fagment"><code class="typescript-language" data-trim data-noescape>
+						// to all clients in room1
+						io.in("room1").emit(/* ... */);
+					</code></pre>
+				</section>
+				<section>
+					<h4>namespaces</h4>
+				</section>
+				<section>
+					<p>You can also set a namespace used by the gateway using the following construction:</p>
+					<pre class="fagment"><code class="typescript-language" data-trim data-noescape>
+						@WebSocketGateway({ namespace: 'events' })
+					</code></pre>
+				</section>
+				<section>
+					<h4>CORS</h4>
+					<p>Cross-Origin Resource Sharing</p>
+				</section>
+				<section>
+					<iframe width="1000" height="650" src="https://www.youtube.com/embed/4KHiSt0oLJ0">
+					</iframe>
+				</section>
+				<section>
+					<pre class="fagment"><code class="typescript-language" data-trim data-noescape>
+						@WebSocketGateway({ cors: true })
+					</code></pre>
+				</section>
+			</section>
+			</div>
+		</div>
+
+		<script src="../../dist/reveal.js"></script>
+		<script src="../../plugin/notes/notes.js"></script>
+		<script src="../../plugin/markdown/markdown.js"></script>
+		<script src="../../plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
+
+
+
+<!-- <pre class="fragment" data-id="code-animation" ><code class="hljs">	<script type="text/template">
+				
+</script></code></pre> -->

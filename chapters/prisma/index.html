@@ -26,10 +26,7 @@
 			</section>
 			<section>
 				<h4>Postgres</h4>
-				<h4>Image!</h4>
-			</section>
-			<section>
-				<h4>TODO Postgres setup with docker and pgAdmin</h4>
+				<img src="../../assets/postgres.png" style="height: 400px; width: 800px;">
 			</section>
 			<section>
 				<h4>Docker</h4>
@@ -39,8 +36,58 @@
 				</iframe>
 			</section>
 			<section>
+				<section>
+					<h4> Setup local postgres db</h4>
+				</section>
+				<section>
+					<p>
+						step 1 - install docker on your computer
+					</p>
+				</section>
+				<section>
+					<p>
+						step 2 - create a docker container with the postgres image and expose it's port using this command:
+					</p>
+					<p>
+						docker run --name postgres-nest -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+					</p>
+				</section>
+				<section>
+					<p> --name postgres-nest - that is the name of the container</p>
+					<p> -p 5432:5432  - take the container post and map it on the this port</p>
+					<p> -e POSTGRES_PASSWORD=postgres - create an environment variable with this name and this value</p>
+					<p> -d - detach mode</p>
+					<p> postgres - the name of the image</p>
+				</section>
+				<section>
+					<p> type: "docker container ls" to make sure you have the container running</p>
+				</section>
+				<section>
+					<p>	step 3 - install pgAdmin4</p>
+				</section>
+				<section>
+					<img src="../../assets/pgadmin-1.png" style="height: 600px; width: 900px;">
+				</section>
+				<section>
+					<img src="../../assets/pgadmin-2.png" style="height: 600px; width: 900px;">
+				</section>
+				<section>
+					<img src="../../assets/pgadmin-3.png" style="height: 550px; width: 900px;">
+					<p>set your password (POSTGRES_PASSWORD) and save it</p>
+				</section>
+				<section>
+					<img src="../../assets/pgadmin-4-new.png" style="height: 600px; width: 900px;">
+				</section>
+				<section>
+					<img src="../../assets/pgadmin-5.png" style="height: 400px; width: 600px;">
+				</section>
+				<section>
+					<img src="../../assets/pgadmin-6.png" style="height: 600px; width: 900px;">
+				</section>
+			</section>
+			<section>
 				<h4> Prisma</h4>
-				<h4>Picture!</h4>
+				<img src="../../assets/prisma.png" style="height: 400px; width: 800px;">
 			</section>
 			<section>
 				<iframe width="1000" height="650" src="https://www.youtube.com/embed/rLRIB6AF2Dg">
@@ -202,7 +249,7 @@
 			</section>
 			<section>
 				<section>
-					<h4>Peisma crush course</h4>
+					<h4>Prisma crash course</h4>
 				</section>
 				<section>
 					<h4>Model fields</h4>
