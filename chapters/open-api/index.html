@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="../../dist/reset.css">
+		<link rel="stylesheet" href="../../dist/reveal.css">
+		<link rel="stylesheet" href="../../dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../../plugin/highlight/monokai.css">
+    <style>
+        .reveal {
+            background-color: black
+        }
+    </style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+                <section>
+                    <h4>Open API Docs (Swagger)</h4>
+                </section>
+                <section id="fragments">
+                    <p>The OpenAPI specification is a language-agnostic definition format used to describe RESTful APIs </p>
+                    <p class="fragment"> it let us describe our entire API including:</p>
+                    <p class="fragment"> available operations (endpoints)</p>
+                    <p class="fragment"> operation parameters</p>
+                    <p class="fragment"> input and output for each operation</p>
+                    <p class="fragment"> authentication method</p>
+                    <p class="fragment"> and more</p>
+                </section>
+                <section>
+                    <p> Nest provides a dedicated module which allows generating such a specification by leveraging decorators.</p>
+                </section>
+                <section>
+                    <p>npm install --save @nestjs/swagger swagger-ui-express</p>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers=" 1- 50| 8-14 | 15 | 16">
+                    //main.ts
+                    import { NestFactory } from '@nestjs/core';
+                    import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+                    import { AppModule } from './app.module';
+
+                    async function bootstrap() {
+                    const app = await NestFactory.create(AppModule);
+
+                    const config = new DocumentBuilder()
+                        .setTitle('Cats example')
+                        .setDescription('The cats API description')
+                        .setVersion('1.0')
+                        .addTag('cats')
+                        .build();
+                    const document = SwaggerModule.createDocument(app, config);
+                    SwaggerModule.setup('api', app, document);
+
+                    await app.listen(3000);
+                    }
+                    bootstrap();
+                      </code></pre>
+                </section>
+                <section>
+                    <p>While the application is running, open your browser and navigate to http://localhost:3000/api</p>
+                </section>
+                <section>
+                    <img src="../../assets/open-api.png" style="height: 650px; width: 1000px;">
+                </section>
+                <section  id="fragments" data-background-color="white" data-background-iframe="https://docs.nestjs.com/openapi/introduction#document-options" data-background-interactive></section>
+                <section  id="fragments" data-background-color="white" data-background-iframe="https://docs.nestjs.com/openapi/introduction#setup-options" data-background-interactive></section>
+                <section>
+                    <img src="../../assets/open-api-empty-post.png" style="height: 550px; width: 1000px;">
+                </section>
+                <section>
+                    <p>typeScript's metadata reflection system has several limitations which make it impossible to, for instance, determine what properties a class consists of or recognize whether a given property is optional or required. However, some of these constraints can be addressed at compilation time. Nest provides a plugin that enhances the TypeScript compilation process to reduce the amount of boilerplate code required.                    </p>
+                </section>
+                <section id="fragments">
+                    <p>The Swagger plugin will automatically:</p>
+                    <p class="fragment">annotate all DTO properties with @ApiProperty unless @ApiHideProperty is used</p>
+                    <p class="fragment">set the required property depending on the question mark (e.g. name?: string will set required: false)</p>
+                    <p class="fragment">set the type or enum property depending on the type (supports arrays as well)</p>
+                    <p class="fragment">set the default property based on the assigned default value</p>
+                </section>
+                <section>
+                    <p class="fragment">set several validation rules based on class-validator decorators (if classValidatorShim set to true)</p>
+                    <p class="fragment">add a response decorator to every endpoint with a proper status and type (response model)</p>
+                    <p class="fragment">generate descriptions for properties and endpoints based on comments (if introspectComments set to true)</p>
+                    <p class="fragment">generate example values for properties based on comments (if introspectComments set to true</p>
+                </section>
+                <section>
+                    <p>Please, note that your filenames must have one of the following suffixes: ['.dto.ts', '.entity.ts'] (e.g., create-user.dto.ts) in order to be analysed by the plugin.</p>
+                </section>
+                <section>
+                    <p> all we need to do is to to nest-cli.json and add:</p>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers=" 1- 50| 3-5">
+                        {
+                            "collection": "@nestjs/schematics",
+                            "sourceRoot": "src",
+                            "compilerOptions": {
+                              "deleteOutDir": true,
+                              "plugins": ["@nestjs/swagger"]
+                            }
+                          }
+                          </code></pre>
+                </section>
+                <section>
+                    <img src="../../assets/open-api-post.png" style="height: 550px; width: 1000px;">
+                </section>
+                <section>
+                    <h4>Mapped types</h4>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers=" 1- 50| 1">
+                        import { PartialType } from '@nestjs/swagger';
+                        import { CreatePlayerDto } from './create-player.dto';
+                        
+                        export class UpdatePlayerDto extends PartialType(CreatePlayerDto) {}
+                    </code></pre>
+                </section>
+                <section>
+                    <h4>Decorators</h4>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers=" 1- 50">
+                    @ApiProperty({
+                        required: true,
+                        type: Number,
+                        description: 'The age of a cat',
+                        minimum: 1,
+                        default: 1,
+                      })
+                      age: number;
+                    </code></pre>
+                </section>
+                <section>
+                    <p>Arrays</p>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers=" 1- 50">
+                        @ApiProperty({ type: [String] })
+                        names: string[];
+                    </code></pre>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape>
+                        @ApiResponse()
+                    </code></pre>
+                    <p> the @ApiResponse() let us explicitaly specify additional responses</p>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers=" 1- 50| 3">
+                        @Get()
+                        // @ApiResponse({status: 403, description: "Forbidden"})
+                        @ApiForbiddenResponse()
+                        async getAllPlayers(
+                          @Query() paginationQuery: PaginationQueryDto<Player>,
+                        ): Promise<Player[]> {
+                          return await this.playersService.getAllPlayers(paginationQuery);
+                        }
+                    </code></pre>
+                </section>
+                <section  id="fragments" data-background-color="white" data-background-iframe="https://docs.nestjs.com/openapi/decorators" data-background-interactive></section>
+                <section>
+                    <h4>Tags</h4>
+                </section>
+                <section>
+                    <pre><code class="typescript-language" data-trim data-noescape data-line-numbers=" 1- 50| 1">
+                        @ApiTags("players")
+                        @Controller('players')
+                        export class PlayersController {
+                        //code ...
+                        }
+                    </code></pre>
+                </section>
+                <section>
+                    <img src="../../assets/open-api-tags.png" style="height: 550px; width: 1000px;">
+                </section>
+			</div>
+		</div>
+
+		<script src="../../dist/reveal.js"></script>
+		<script src="../../plugin/notes/notes.js"></script>
+		<script src="../../plugin/markdown/markdown.js"></script>
+		<script src="../../plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>

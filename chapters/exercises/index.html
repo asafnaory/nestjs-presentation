@@ -26,39 +26,180 @@
   <body>
     <div class="reveal">
       <div class="slides">  
-       <section>
         <section>
-          <h4>Exercise 1 - CRUD</h4>
+          <section>
+            <h4>Exercise 1 - CRUD</h4>
+            <p> Task: build a player CRUD</p>
+          </section>
+          <section>
+            <h4>Steps:</h4>
+            <p>1. create new nest project </p>
+            <p>2. create a players module</p>
+            <p>3. create a players controller</p>
+            <p>4. create a players service</p>
+            <p>5. create a players entity</p>
+            <p>6. create a players createDto</p>
+            <p>7. create a players updateDto</p>
+          <a href="https://docs.nestjs.com/">Nest Docs</a>
         </section>
        </section>
        <section>
         <section>
           <h4>Exercise 2 - Validation</h4>
-        </section>
+          <p> Task: create validations for DTOs</p>
+          </section>
+        <section>
+          <h4>Steps:</h4>
+          <p>1. add validations to createPlayerDto</p>
+          <p>2. add validations to updatePlayerDto</p>
+          <p>3. add useGlobalPipes in main.ts with correct configurations</p>
+          <p>4. create an IdvalidationPipe for validating the player id (1 - 1000)</p>
+          <a href="https://docs.nestjs.com/techniques/validation#validation">Validation Docs</a>
        </section>
+        </section>
        <section>
         <section>
           <h4>Exercise 3 - Database </h4>
+          <p> Task: add a database to save the players </p>
+        </section>
+        <section>
+          <h4>Prisma</h4>
+        </section>
+        <section>
+          <h4>Steps:</h4>
+          <p>1. add prisma npm module</p>
+          <p>2. add prisma schema </p>
+          <p>3. create a prisma service and inject into the player service</p>
+          <p>4. change saving the data from local array into prisma DB using the prisma service</p>
+          <p>5. add pagination params for the getAllPlayers - skip, take, cursor, where and orderby</p>
+          <a href="https://docs.nestjs.com/recipes/prisma#prisma">Prisma Docs</a>
+        </section>
+        <section>
+          <h4>MongoDB</h4>
+          <p> Task: save data on DB </p>
+        </section>
+          <section>
+            <p>Steps:</p>
+            <p>1. Add mongoose npm module</p>
+            <p>2. Change player entity to mongoose schema </p>
+            <p>3. Add MongooseModule to players module</p>
+            <p>3. Inject player model to service and use it to save data</p>
+            <p>4. Add pagination params for the getAllPlayers - limit and offset</p>
+            <a href="https://docs.nestjs.com/techniques/mongodb">Mongo Docs</a>
         </section>
        </section>
        <section>
         <section>
-          <h4>Exercise 4 - Realationships </h4>
+          <h4>Exercise 4 - Relationships </h4>
+          <p> Task: create team model and create one-to-many relationships with player</p>
+        </section>
+        <section>
+          <h4>Prisma</h4>
+        </section>
+        <section>
+          <h4>Steps:</h4> 
+          <p>1. Add team to prisma schema and a relationships to player</p>
+          <p>2. Modify player schema and add relationships to team</p>
+          <p>2. Create team module, controller and service </p>
+          <p>3. Add CRUD for team and modify player service</p>
+        </section>
+        <section>
+          <h4>MongoDB</h4>
+        </section>
+          <section>
+            <p>Steps:</p>
+            <p>1. Create team mongoose schema (team entity) and a relationships to player</p>
+            <p>2. Modify player schema and add relationships to team</p>
+            <p>3. Create teams module, controller and service  </p>
+            <p>4. Add CRUD for team and modify player service</p>
         </section>
        </section>
        <section>
         <section>
-          <h4>Exercise 5 - Authentication </h4>
+          <h4>Exercise 5 - Authentication 1 </h4>
+          <p> Task: add basic authentication </p>
+        </section>
+        <section>
+          <p>Steps:</p>
+          <p>1. add Agent model to prisma schema (user) with id, email, password and players array</p>
+          <p>1. Create auth module, controller and service with signup and signin methods</p>
+          <p>3. signup: receives email and password (AuthCredentialsDto) and create agent in the DB with hashed password </p>
+          <p>4. signin: receives email and password (AuthCredentialsDto) and returns "OK" if they are valid</p>
+          <a href="https://www.npmjs.com/package/bcryptjs">Use bcryptjs</a>
+        </section>
+       </section>
+       <section>
+        <section>
+          <h4>Exercise 6 - Authentication 2 </h4>
+          <p> Task: Add JWT </p>
+        </section>
+        <section>
+          <p>Steps:</p>
+          <p>1. Add JWT module to AuthModule with configurations </p>
+          <p>2. Create JwtStrategy and add it to AuthModule</p>
+          <p>3. Modify signin method in service to return JWT</p>
+          <p>4. Create GetAgent() decorator</p>
+          <a href="https://docs.nestjs.com/security/authentication#jwt-functionality">Nest JWT Docs</a>
         </section>
        </section>
        <section>
         <section>
           <h4>Exercise 6 - Authorization </h4>
+          <p> Task: add Roles specific routes</p>
+        </section>
+        <section>
+          <p>Steps: part 1</p>
+          <p>1. Modify agent schema and add Role with BASIC and Admin</p>
+          <p>2. Create roles decorator that SetMetadata with some role (for example: Admin).</p>
+          <p>3. Create roles guard that checks the class or method roles and the user roles and return true only if they match.</p>
+          <p>4. Create public decorator that SetMetadata with value for isPublic (for setting public routes).</p>
+        </section>
+        <section>
+          <p>Steps: part 2</p>
+          <p>5. Extend AuthGuard and check if the isPublic decorator is attached to some class or method are return true no matter what.</p>
+          <p>6. Move the AuthGuard to main.ts and use is public on signup and signin routes </p>
+          <p>6. Create an "add-to-team" route on player controller and mark it with RolesGuard and the ADMIN role</p>
+          <a href="https://docs.nestjs.com/security/authorization">Nest Authorization Docs</a>
         </section>
        </section>
        <section>
         <section>
           <h4>Exercise 7 - Testing </h4>
+          <p> Task: Tests</p>
+        </section>
+        <section>
+          <p>Steps: part 1</p>
+          <p>1. Create PlayersService unit tests </p>
+          <p>2. Create PlayersController unit tests </p>
+          <p>3. Create players e2e test </p>
+          <a href="https://docs.nestjs.com/fundamentals/testing#testing">Nest Testing Docs</a>
+        </section>
+       </section>
+       <section>
+        <section>
+          <h4>Exercise 8 - Websocket </h4>
+          <p> Task: Create WebSocketGateway for namespace "chat"</p>
+        </section>
+        <section>
+          <p>Steps: part 1</p>
+          <p>1. Create class WebSocketGateway with namespace "chat" and cors true</p>
+          <p>2. Create SubscribeMessage method that listens to "chatToServer" event and receives sender, room and message and emit that message to all listeners to "chatToClient" in the room received </p>
+          
+        </section>
+        <section>
+          <p>Steps: part 2</p>
+          <p>3. Create SubscribeMessage method that listens to "joinRoom" event and receives room, and user, joins the client to the requested room and emits a "joinedRoom" event with the room and the user to all listeners in the room but this user</p>
+          <p>4. Create SubscribeMessage method that listens to "leaveRoom" event and receives room, and user, leaves the client from the requested room and emits a "leftRoom" event with the room and the user to all listeners in the room but this user</p>
+        </section>
+        <section>
+          <p>Steps: part 3</p>
+          <p>5. Test it with client</p>
+          <a href="https://docs.nestjs.com/websockets/gateways">Nest Gateways Docs</a>
+        </section>
+       </section>
+       <section>
+        <section>
+          <h4>Exercise 9 - Next Step </h4>
         </section>
        </section>
       </div>

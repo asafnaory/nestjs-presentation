@@ -248,7 +248,63 @@
 					<section>
 						<h4>access token and refresh token</h4>
 					</section>
+					<section id="fragments">
+						<h4> jwt hijack attack </h4>
+					</section>
+					<section id="fragments">
+						<p> The problem:</p>
+						<p class="fragment"> there is no way to invalidate JWT tokens once they have been hijacked, apart from changing the server secret that would invalidate all token for all of our users. </p>
+					</section>
+					<section id="fragments">
+						<p> The solution:</p>
+						<p class="fragment"> Refresh Tokens: The main idea behind it is that after a successful sign-in, we create two separate JWT tokens. One is a short-lived access token. The other one is a long-term refresh token. You get to decide the values for "short" and "long"</p>
+					</section>
+					<section>
+						<p>We will store both of the tokens in httpOnly cookies which are not accessible to client side JS and automatically attached on each request to the server. Once the API states that the access token expires, the client needs to request a new access_token from the server, this time using the long-term refresh token to validate the request</p>
+					</section>
+					<section>
+						<p>Refresh tokens are being kept in the DB, and are being hashed just like passwords for the same reasons. last thing we want is your refresh token to be compromised. The fact we store refresh-tokens in the db means we can invalidate them per user - which we couldn't do so far. Think about a "reset password" scenario... this is exactly it.</p>
+					</section>
+					<section>
+						<h4>the value of "long-term" for refresh tokens </h4>
+						<ul>
+							<li> How long before the user will need to login with credentials again.</p>
+						</ul>
+					</section>
+					<section>
+						<h4>the value of "short-term" for access tokens</h4>
+						<ul>
+							<li> How long will pass until your server will query the DB in order to validate</p>
+							<li> How long will a hijacked access token will stay valid</p>
+						</ul>
+					</section>
+					<section>
+						<img src="../../assets/access_token_refresh_toekn.png" style="height: 500px; width: 1000px;">
+					</section>
+					<section>
+						<h4>what to do?</h4>
+					</section>
+					<section>
+						<ul>
+							<li>1. add refreshToken to agent in prisma schema as optional</li>
+							<li>2. createAccessTokenCookie - a method that creates access token and returns the cookie string and the access token </li>
+							<li>3. createRefreshTokenCookie - a method that creates refresh token and returns the cookie string and the refresh token </li>
+						</ul>
+					</section>
+					<section>
+						<ul>
+							<li>4. create new strategy for refresh token JwtRefreshTokenStrategy that pulls the token from the cookie and validates it and the user (agent) on it</li>
+							<li>5. update the jwt strategy for access token JwtStrategy to pull the token from the cookie and validates it and the user (agent) on it </li>
+						</ul>
+					</section>
+					<section>
+						<ul>
+							<li>6. save the refresh token to the DB when the user signs in, in order to validate it when the user need a new access token</li>
+							<li>7. add a "refresh" route that validate the refresh token (using a guard- JwtRefreshTokenStrategy), checks the user and the refresh token in the DB and sees it they are match, and sets a new access token in the cookie   </li>
+						</ul>
+					</section>
 				</section>
+				
 			</div>
 		</div>
 
