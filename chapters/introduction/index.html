@@ -266,9 +266,11 @@
                 </section>
                 <section id="fragments">
                     <p>Dependency Injection</p>
-                    <p class="fragment">
-                        In Nest, thanks to TypeScript capabilities, it's extremely easy to manage dependencies because they are resolved just by type. In the example below, Nest will resolve the catsService by creating and returning an instance of CatsService (or, in the normal case of a singleton, returning the existing instance if it has already been requested elsewhere). This dependency is resolved and passed to your controller's constructor (or assigned to the indicated property)
-                    </p>
+                    <ul>
+                        <li>Nest will resolve the catsService by creating and returning an instance of CatsService </li>
+                        <li class="fragment">or return the existing instance if it has already been requested elsewhere </li>
+                        <li class="fragment">This dependency is resolved and passed to your controller's constructor </li>
+                    </ul>
                 </section>
             </section>
         </div>

@@ -37,27 +37,18 @@
           <iframe width="1000" height="650" src="https://www.youtube.com/embed/vYFhHVMetPg">
           </iframe>
       </section>
-       <section>
-         <p>Dependency injection is basically providing the objects that an object needs (its dependencies) instead of having it construct them itself. It's a very useful technique for testing, since it allows dependencies to be mocked or stubbed out.</p>
+       <section id="fragments">
+         <p>Dependency injection is basically providing the objects that an object needs (its dependencies) instead of having it construct them itself. </p>
+         <p class="fragment">It's a very useful technique for testing, since it allows dependencies to be mocked or stubbed out.</p>
        </section>
-       <section>
-
-         <section id="fragments">
-           <p>In object-oriented design, the dependency inversion principle is a specific methodology for loosely coupling software modules. When following this principle, the conventional dependency relationships established from high-level, policy-setting modules to low-level, dependency modules are reversed, thus rendering high-level modules independent of the low-level module implementation details. The principle states: </p>
-          </section>
-          <section id="fragments">
-            <p class="fragment">High-level modules should not import anything from low-level modules. Both should depend on abstractions (e.g., interfaces).</p>
-            <p class="fragment">Abstractions should not depend on details. Details (concrete implementations) should depend on abstractions.</p>  
-          </section>
-        </section>
        <section>
          <section id="fragments">
            <p>Nests DI mechanism has 3 steps:</p>
-           <p class="fragment">@Injectable(): declare a class that can be managed by the nest container (Ioc or DI container)</p>
-           <p class="fragment">request the service in the constractor</p>
-           <p class="fragment">Declare the provider in module.</p>
-           <p></p>
-           <p></p>
+           <ul>
+             <li class="fragment">@Injectable(): declare a class that can be managed by the nest container (Ioc or DI container)</li>
+             <li class="fragment">Request the service in the constructor</li>
+             <li class="fragment">Declare the provider in the Module.</li>
+            </ul>
           </section>
           <section>
             <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-5 | 2">
@@ -289,9 +280,9 @@
           <h4>Leverage Async providers</h4>
         </section>
         <section id="fagments">
-          <p>Sometims when our application bootstrap, we need to wait until one or more aync tasks have completed</p>
-          <p class="fragment">we don't want to accept requests until we have a DB connection</p>
-          <p class="fragment">that is where async providers come in to play</p>
+          <p>Sometimes when our application bootstraps, we need to wait until one or more aync tasks have completed</p>
+          <p class="fragment">We don't want to accept requests until we have a DB connection</p>
+          <p class="fragment">That is where async providers come in to play</p>
         </section>
         <section>
           <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-20 | 7-11">
@@ -314,25 +305,29 @@
           </section>
        </section>
        <section>
-        <h4>Circular dependency </h4>
-       </section>
-       <section>
+         <section>
+           <h4>Circular dependency </h4>
+          </section>
+          <section  id="fragments" data-background-color="white" data-background-iframe="https://docs.nestjs.com/fundamentals/circular-dependency#forward-reference" data-background-interactive></section>
+        </section>
+        <section>
         <section>
           <h4>Dynamic Modules</h4>
         </section>
         <section id="fragments">
-          <p>We have already talked about "regular" modules, but what if we want to configure our modules at runtime</p>
-          <p class="fragment">Consider the case where we have a general purpose module that needs to behave differently in different use cases. This is analogous to the concept of a "plugin" in many systems, where a generic facility requires some configuration before it can be used by a consumer.</p>
+          <p>What if we want to configure our modules at runtime</p>
+          <p class="fragment">example: a general purpose module that needs to behave differently in different use cases.</p>
         </section>
         <section id="fragments">
-          <p>Using dynamic module features, we can make our configuration module dynamic so that the consuming module can use an API to control how the configuration module is customized at the time it is imported.</p>
-          <p class="fragment">In other words, dynamic modules provide an API for importing one module into another, and customizing the properties and behavior of that module when it is imported, as opposed to using the static bindings we've seen so far.</p>
+          <p> Dynamic modules provide an API for importing one module into another, and customizing the properties and behavior of that module when it is imported, as opposed to using the static bindings we've seen so far.</p>
         </section>
         <section id="fragments">
           <h4>The example: </h4>
-          <p class="fragment"> Our requirement is to make ConfigModule accept an options object to customize it</p>
-          <p class="fragment"> imagine you want to store your various .env files in a folder under the project root called config (i.e., a sibling folder to src).</p>
-          <p class="fragment"> You'd like to be able to choose different folders when using the ConfigModule in different projects.</p>
+          <ul>
+            <li class="fragment"> Our requirement is to make ConfigModule accept an options object to customize it</li>
+            <li class="fragment"> imagine you want to store your various .env files in a folder under the project root called config.</li>
+            <li class="fragment"> You'd like to be able to choose different folders when using the ConfigModule in different projects.</li>
+          </ul>
         </section>
         <section id="fragments">
           <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-30 | 7">
@@ -402,11 +397,6 @@
          <section>
            <h4>control providers scope</h4>
           </section>
-          <section id="fragments">
-            <p>Node JS Platform does not follow Request/Response Multi-Threaded Stateless Model</p>
-            <p>It follows Single Threaded with Event Loop Model.</p>
-            <p></p>
-          </section>
           <section>
             <p>there are edge-cases when request-based lifetime may be the desired behavior, for instance per-request caching in GraphQL applications, request tracking, and multi-tenancy. Injection scopes provide a mechanism to obtain the desired provider lifetime behavior. </p>
           </section>
@@ -447,9 +437,17 @@
               export class CatsService {}
             </code></pre>
             </section>
-            <section>
-              <p>Using request-scoped providers will have an impact on application performance. While Nest tries to cache as much metadata as possible, it will still have to create an instance of your class on each request. Hence, it will slow down your average response time and overall benchmarking result. Unless a provider must be request-scoped, it is strongly recommended that you use the default singleton scope.</p>
+            <section id="fragments">
+              <ul>
+                <li>Using request-scoped providers will have an impact on application performance</li>
+                <li class="fragment"> Nest will have to create an instance of your class on each request.</li>
+                <li class="fragment"> Hence, it will slow down your average response time and overall benchmarking result.</li>
+                <li class="fragment"> Unless a provider must be request-scoped, it is strongly recommended that you use the default singleton scope.</li>
+              </ul>
             </section>
+          </section>
+          <section>
+            <h4>Exercise 1</h4>
           </section>
       </div>
     </div>

@@ -43,14 +43,21 @@
             </section>
            <section>
                 <section>What is MongoDB?</section>
-                <section>
-                    <p>MongoDB is a schema-less NoSQL document database. It means you can store JSON documents in it, and the structure of these documents can vary as it is not enforced like SQL databases. This is one of the advantages of using NoSQL as it speeds up application development and reduces the complexity of deployments.</p>
+                <section id="fragment">
+                    <ul id="fragment">
+                        <li>A schema-less NoSQL document database </li>
+                        <li class="fragments">It means you can store JSON documents in it, and the structure of these documents can vary</li>
+                    </ul>
                 </section>
            </section>
            <section>
                <section>What is Mongoose</section>
-               <section>
+               <section id="fragment">
                    <p>Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js. It manages relationships between data, provides schema validation, and is used to translate between objects in code and the representation of those objects in MongoDB.</p>
+                   <ul>
+                    <li>Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js. </li>
+                    <li class="fragments">It manages relationships between data, provides schema validation, and is used to translate between objects in code and the representation of those objects in MongoDB.</li>
+                </ul>
                 </section>
             </section>
            <section>
@@ -146,9 +153,12 @@
                 <p >@Schema(): marks a class as a schema definition. It maps our Cat class to a MongoDB collection of the same name, but with an additional “s” at the end - so the final mongo collection name will be cats</p>
                 <p class="fragment">@Prop():  decorator defines a property in the document.</p>
             </section>
-            <section>
-                <p>The schema types for these properties are automatically inferred thanks to TypeScript metadata (and reflection) capabilities. However, in more complex scenarios in which types cannot be implicitly reflected (for example, arrays or nested object structures), types must be indicated explicitly, as follows:</p>
-                <pre><code class="typescript-language" data-trim data-noescape>
+            <section id="fragments">
+                <ul>
+                    <li>The schema types for these properties are automatically inferred thanks to TypeScript metadata (and reflection) capabilities.</li>
+                    <li class="fragment">in more complex scenarios in which types cannot be implicitly reflected (for example, arrays or nested object structures), types must be indicated explicitly, as follows:</li>
+                </ul>
+                <pre class="fragment"><code class="typescript-language" data-trim data-noescape>
                     @Prop([String])
                     tags: string[];
                   </code></pre>
