@@ -148,6 +148,9 @@
             bootstrap();
             </code></pre>
         </section>
+        <section>
+          <section  id="fragments" data-background-color="white" data-background-iframe=" https://github.com/typestack/class-validator" data-background-interactive></section>
+        </section>
         </section>
         <section>
           <section>
@@ -184,7 +187,7 @@
           </section>
           <section>
             <pre><code class="typescript-language" data-trim data-noescape>
-              export class UpdateCatAgeDto extends PickType(CreateCatDto, ['age'] as const) {}
+              export class UpdateCatAgeDto extends PickType(CreateCatDto, ['age']) {}
           </code></pre>
           </section>
           <section id="fragments">
@@ -195,7 +198,7 @@
           </section>
           <section>
             <pre><code class="typescript-language" data-trim data-noescape>
-              export class UpdateCatDto extends OmitType(CreateCatDto, ['name'] as const) {}
+              export class UpdateCatDto extends OmitType(CreateCatDto, ['name']) {}
           </code></pre>
           </section>
           <section id="fragments">

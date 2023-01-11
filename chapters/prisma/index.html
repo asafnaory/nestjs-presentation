@@ -179,7 +179,7 @@
 					<p class="fragment">npx prisma migrate dev --name init</p>
 				</section>
 				<section>
-					<p>This prisma migrate dev command generates SQL files and directly runs them against the database. In this case, the following migration files was created in the existing prisma directory:</p>
+					<p>This prisma migrate dev command generates SQL files and directly runs them against the database.</p>
 				</section>
 			</section>
 			<section>
@@ -193,9 +193,9 @@
 					<p>To install Prisma Client in your project, run the following command in your terminal:</p>
 					<p class="fragment">npm install @prisma/client</p>
 				</section>
-				<section>
+				<section  id="fragments">
 					<p>Note that during installation, Prisma automatically invokes the prisma generate command for you. In the future, you need to run this command after every change to your Prisma models to update your generated Prisma Client.</p>
-					<p>The prisma generate command reads your Prisma schema and updates the generated Prisma Client library inside node_modules/@prisma/client.	</p>
+					<p lass="fragment">The prisma generate command reads your Prisma schema and updates the generated Prisma Client library inside node_modules/@prisma/client.	</p>
 				</section>
 			</section>
 			<section>
@@ -282,76 +282,9 @@
 					<p class="fragment">BigInt</p>
 					<p class="fragment">Float</p>
 					<p class="fragment">Decimal</p>
-					<p class="fragment">DateTime</p>
 					<p class="fragment">Json</p>
 					<p class="fragment">Bytes</p>
 					<p class="fragment">Unsupported("")</p>
-				</section>
-				<section>
-					<h4>Model Relationships</h4>
-				</section>
-				<section id="fragments">
-					<p>another type you can references is another model type. </p>
-				</section>
-				<section>
-					<p>this is a one-to-many relationships - each user can have many posts, but each post can have only one user</p>
-					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="2 | 5 | 13 -14">
-						model User {
-							id    Int     @default(uuid()) @id
-							email String  @unique
-							name  String?
-							posts Post[]
-						  }
-						  
-						  model Post {
-							id    Int     @default(uuid()) @id
-							title     String
-							content   String?
-							published Boolean? @default(false)
-							author    User?    @relation(fields: [authorId], references: [id])
-							authorId  Int?
-						  }
-					  </code></pre>
-				</section>
-				<section>
-					<p>this is a many-to-many relationships - each category can have many posts, and each post can have many categories </p>
-					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="17 | 22">
-						  // User ...
-
-						  model Post {
-							id    Int     @default(uuid()) @id
-							title     String
-							content   String?
-							published Boolean? @default(false)
-							author    User?    @relation(fields: [authorId], references: [id])
-							authorId  Int?
-							categories Category[]
-						  }
-
-						  model Category {
-							id    Int     @default(uuid()) @id
-							post Post[]
-						  }
-					  </code></pre>
-				</section>
-				<section>
-					<p>this is a one-to-one relationships - each User can have one UserPreference, and each UserPreference can have one User </p>
-					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="15 | 20">
-						model User {
-							id    Int     @default(uuid()) @id
-							email String  @unique
-							name  String?
-							posts Post[]
-							userPreference UserPreference?
-						  }
-
-						  model UserPreference {
-							id    Int     @default(uuid()) @id
-							emailUpdates Boolean[]
-							user User @relation(fields[userId], references:[id])
-							userId String @unique
-						  }
-					  </code></pre>
 				</section>
 				<section>
 					<h4>attributes</h4>
@@ -369,14 +302,14 @@
 				<section>
 					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="3 | 11">
 						model User {
-							id    Int     @default(uuid()) @id
+							id    String     @default(uuid()) @id
 							email String  @unique
 							name  String?
 							posts Post[]
 						  }
 
 						model Post {
-						  id    Int     @default(uuid()) @id
+						  id    String     @default(uuid()) @id
 						  title     String
 						  updatedAt DateTime  @updatedAt
 						  content   String?
@@ -393,7 +326,7 @@
 				<section>
 					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="8 - 11 | 6">
 						model User {
-							id    Int     @default(uuid()) @id
+							id    String     @default(uuid()) @id
 							email String  @unique
 							name  String?
 							posts Post[]
@@ -423,6 +356,74 @@
 			<section>
 				<h4>Exercise 3 - Database</h4>
 			</section>
+			<section>
+				<section>
+					<h4>Model Relationships</h4>
+				</section>
+				<section id="fragments">
+					<p>another type you can references is another model type. </p>
+				</section>
+				<section>
+					<p>this is a one-to-many relationships - each user can have many posts, but each post can have only one user</p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="2 | 5 | 13 -14">
+						model User {
+							id    String  @id @default(uuid())
+							email String  @unique
+							name  String?
+							posts Post[]
+						}
+						
+						model Post {
+							id        String   @id @default(uuid())
+							title     String
+							content   String?
+							published Boolean? @default(false)
+							author    User     @relation(fields: [authorId], references: [id])
+							authorId  String
+						}
+					</code></pre>
+				</section>
+				<section>
+					<p>this is a many-to-many relationships - each category can have many posts, and each post can have many categories </p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="17 | 22">
+						// User ...
+
+						model Post {
+							id         String     @id @default(uuid())
+							title      String
+							content    String?
+							published  Boolean?   @default(false)
+							author     User      @relation(fields: [authorId], references: [id])
+							authorId   String
+							categories Category[]
+						}
+						
+						model Category {
+							id   String @id @default(uuid())
+							post Post[]
+						}						  
+					</code></pre>
+				</section>
+				<section>
+					<p>this is a one-to-one relationships - each User can have one UserPreference, and each UserPreference can have one User </p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="15 | 20">
+						model User {
+							id             String         @id @default(uuid())
+							email          String         @unique
+							name           String?
+							posts          Post[]
+							userPreference UserPreference?
+						}
+						
+						model UserPreference {
+							id           String    @id @default(uuid())
+							emailUpdates Boolean[]
+							user         User      @relation(fields: [userId], references: [id])
+							userId       String    @unique
+						}
+					</code></pre>
+				</section>
+	</section>
 			<section>
 				<h4>Exercise 4 - Relationships</h4>
 			</section>
