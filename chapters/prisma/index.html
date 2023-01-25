@@ -194,8 +194,8 @@
 					<p class="fragment">npm install @prisma/client</p>
 				</section>
 				<section  id="fragments">
-					<p>Note that during installation, Prisma automatically invokes the prisma generate command for you. In the future, you need to run this command after every change to your Prisma models to update your generated Prisma Client.</p>
-					<p lass="fragment">The prisma generate command reads your Prisma schema and updates the generated Prisma Client library inside node_modules/@prisma/client.	</p>
+					<!-- <p>Note that during installation, Prisma automatically invokes the prisma generate command for you. In the future, you need to run this command after every change to your Prisma models to update your generated Prisma Client.</p> -->
+					<p>The prisma generate command reads your Prisma schema and updates the generated Prisma Client library inside node_modules/@prisma/client.	</p>
 				</section>
 			</section>
 			<section>
@@ -356,6 +356,33 @@
 			<section>
 				<h4>Exercise 3 - Database</h4>
 			</section>
+			<section class="fragments">
+				<h4>enableShutdownHooks</h4>
+				<p>Prisma interferes with NestJS enableShutdownHooks. </p>
+				<p id="fragment">Prisma listens for shutdown signals and will call process.exit() before your application shutdown hooks fire.</p>
+				<p id="fragment">To deal with this, you would need to add a listener for Prisma beforeExit event.</p>
+			</section>
+			<section id="fragments">
+				<h4>Prisma service</h4>
+				<ul>
+					<li class="fragment"> The onModuleInit is optional — if you leave it out, Prisma will connect lazily on its first call to the database</li>
+					<li class="fragment"> We don't bother with onModuleDestroy, since Prisma has its own shutdown hooks where it will destroy the connection.</li>
+				</ul>
+			</section>
+			<section>
+				<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="2 | 5 | 13 -14"></code>
+				async function bootstrap() {
+					const prismaService = app.get(PrismaService);
+					await prismaService.enableShutdownHooks(app)
+				}
+			</code></pre>
+			</section>
+			<section>
+				<ul>
+					<li> after a change in db npx prisma migrate dev --name {migration name} </li>
+					<li> prisma studio : npx prisma studio </li>
+				</ul>
+			</section>
 			<section>
 				<section>
 					<h4>Model Relationships</h4>
@@ -381,6 +408,52 @@
 							author    User     @relation(fields: [authorId], references: [id])
 							authorId  String
 						}
+					</code></pre>
+				</section>
+				<section>
+					<p>The following query retrieves a User by id and includes any related Post records:</p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="15 | 20">
+						const getAuthor = await prisma.user.findUnique({
+							where: {
+							  id: "20",
+							},
+							include: {
+							  posts: true,
+							},
+						  });
+					</code></pre>
+				</section>
+				<section>
+					<p>The following query creates a User record and two connected Post records:</p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="15 | 20">
+						const userAndPosts = await prisma.user.create({
+							data: {
+							 email,
+							  posts: {
+								create: [
+								  { title: 'Prisma Day 2020' }, // Populates authorId with user's id
+								  { title: 'How to write a Prisma schema' }, // Populates authorId with user's id
+								],
+							  },
+							},
+						  })
+					</code></pre>
+				</section>
+				<section>
+					<p>The following query associates an existing Post record with an existing User record:</p>
+					<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="15 | 20">
+						const updateAuthor = await prisma.user.update({
+							where: {
+							  id: 20,
+							},
+							data: {
+							  posts: {
+								connect: {
+								  id: 4,
+								},
+							  },
+							},
+						  })
 					</code></pre>
 				</section>
 				<section>
@@ -423,6 +496,7 @@
 						}
 					</code></pre>
 				</section>
+				<section  id="fragments" data-background-color="white" data-background-iframe="https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries" data-background-interactive></section>
 	</section>
 			<section>
 				<h4>Exercise 4 - Relationships</h4>
