@@ -191,9 +191,9 @@
 						<section>
 							<p>By importing the same secret used when we signed the JWT, we ensure that the verify phase performed by Passport, and the sign phase performed in our AuthService, use a common secret.</p>
 						</section>
-						<section>
+						<section id="fragments">
 							<p> now we can use @UseGuards(AuthGuard())  from @nestjs/passport any where in the code and it will go through the process of: </p>
-							<p> validate token (content and time) ->  go to the validate() method in the JwtStrategy, do it's logic and assingn it's return value to the req.user prop -> go to the controller method </p>
+							<p class="fragment"> validate token (content and time) ->  go to the validate() method in the JwtStrategy, do it's logic and assign it's return value to the req.user prop -> go to the controller method </p>
 						</section>
 						<section id="fragments">
 							<p>For example:</p>
@@ -292,23 +292,23 @@
 					<section>
 						<h4>what to do?</h4>
 					</section>
-					<section>
+					<section id="fragments">
 						<ul>
-							<li>1. add refreshToken to agent in prisma schema as optional</li>
-							<li>2. createAccessTokenCookie - a method that creates access token and returns the cookie string and the access token </li>
-							<li>3. createRefreshTokenCookie - a method that creates refresh token and returns the cookie string and the refresh token </li>
+							<li>1. add refreshToken to user in prisma schema as optional</li>
+							<li class="fragment">2. createAccessTokenCookie - a method that creates access token and returns the cookie string and the access token </li>
+							<li class="fragment">3. createRefreshTokenCookie - a method that creates refresh token and returns the cookie string and the refresh token </li>
 						</ul>
 					</section>
-					<section>
+					<section id="fragments">
 						<ul>
-							<li>4. create new strategy for refresh token JwtRefreshTokenStrategy that pulls the token from the cookie and validates it and the user (agent) on it</li>
-							<li>5. update the jwt strategy for access token JwtStrategy to pull the token from the cookie and validates it and the user (agent) on it </li>
+							<li>4. create new strategy for refresh token JwtRefreshTokenStrategy that pulls the token from the cookie and validates it and the user on it</li>
+							<li class="fragment">5. update the jwt strategy for access token JwtStrategy to pull the token from the cookie and validates it and the user  on it </li>
 						</ul>
 					</section>
-					<section>
+					<section id="fragments">
 						<ul>
 							<li>6. save the refresh token to the DB when the user signs in, in order to validate it when the user need a new access token</li>
-							<li>7. add a "refresh" route that validate the refresh token (using a guard- JwtRefreshTokenStrategy), checks the user and the refresh token in the DB and sees it they are match, and sets a new access token in the cookie   </li>
+							<li class="fragment">7. add a "refresh" route that validate the refresh token (using a guard- JwtRefreshTokenStrategy), checks the user and the refresh token in the DB and sees it they are match, and sets a new access token in the cookie   </li>
 						</ul>
 					</section>
 				</section>
