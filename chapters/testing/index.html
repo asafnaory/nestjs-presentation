@@ -35,10 +35,10 @@
 				<p>$npm run test:e2e - for e2e tests</p>
 			</section>
 			<section id="fragments">
-				<p>Nest includes features such as the following to help developers and teams build and automate tests. Nest:</p>
-				<p class="fragment">automatically scaffolds default unit tests for components and e2e tests for applications</p>
+				<p>Nest includes features such as the following to help developers and teams build and automate tests.</p>
+				<p class="fragment">automatically scaffolds default tests (unit and e2e)</p>
 				<p class="fragment">provides default tooling (such as a test runner that builds an isolated module/application loader)</p>
-				<p class="fragment">provides integration with Jest and Supertest out-of-the-box, while remaining agnostic to testing tools</p>
+				<p class="fragment">provides integration with Jest and Supertest</p>
 				<p class="fragment">makes the Nest dependency injection system available in the testing environment for easily mocking components</p>
 			</section>
 			<section>
@@ -91,10 +91,7 @@
 				<section id="fragments">
 					<p >This method returns a TestingModule instance which in turn provides a few methods</p>
 					<p class="fragment"> For unit tests, the important one is the compile() method. </p>
-					<p class="fragment">This method bootstraps a module with its dependencies (similar to the way an application is bootstrapped in the conventional main.ts file using NestFactory.create()), and returns a module that is ready for testing.</p>
-				</section>
-				<section>
-					<p>TestingModule inherits from the module reference class, and therefore its ability to dynamically resolve scoped providers (transient or request-scoped). Do this with the resolve() method (the get() method can only retrieve static instances).</p>
+					<p class="fragment">This method bootstraps a module with its dependencies (similar to the way an application is bootstrapped), and returns a module that is ready for testing.</p>
 				</section>
 				<section>
 					<pre><code class="typescript-language" data-trim data-noescape>
@@ -138,19 +135,11 @@
                     </code></pre>
 				</section>
 			</section>
-			<section>
-				<section>
-					<h4>Useful methods</h4>
-					<p>TODO!!</p>
-					<p>overrideProvider</p>
-					<p>overrideGuard</p>
-				</section>
-				<section>
 					<h4>E2E tests</h4>
 				</section>
 				<section id="fragments">
 					<p>end-to-end (e2e) testing covers the interaction of classes and modules at a more aggregate level -- closer to the kind of interaction that end-users will have with the production system.</p>
-					<p class="fragment">To perform e2e tests we use a similar configuration to the one we just covered in unit testing. In addition, Nest makes it easy to use the Supertest library to simulate HTTP requests.</p>
+					<p class="fragment">To perform e2e tests Nest makes it easy to use the Supertest library to simulate HTTP requests.</p>
 				</section>
 				<section>
 					<pre><code class="typescript-language" data-trim data-noescape>
@@ -196,17 +185,14 @@
 					<p class="fragment"> request() -  Supertest's function that simulate HTTP tests </p>
 				</section>
 				<section id="fragments">
-					<p class="fragment"> the request() function recives a reference to the HTTP listener that underlies Nest so the http requests will route to our running Nest app - request(app.getHttpServer()) </p>
+					<p> the request() function receives a reference to the HTTP listener that underlies Nest so the http requests will route to our running Nest app - request(app.getHttpServer()) </p>
 					<p class="fragment"> The call to request() hands us a wrapped HTTP Server, now connected to the Nest app, which exposes methods to simulate an actual HTTP request </p>
 				</section>
 				<section>
-					<p class="fragment"> Now, we can call it with HTTP Methods for example: request(...).get('/cats') </p>
+					<p> Now, we can call it with HTTP Methods for example: request(...).get('/cats') </p>
 					<p class="fragment"> this will initiate a request to the Nest app that is identical to an actual HTTP request like get '/cats' coming in over the network. </p>
 				</section>
 				<section id="fragments">
-					<p>
-						In this example, we also provide an alternate implementation of the CatsService which simply returns a hard-coded value that we can test for - overrideProvider()
-					</p>
 					<p class="fragment"> 
 							Similarly, Nest provides methods to override guards, interceptors, filters and pipes with theoverrideGuard(), overrideInterceptor(), overrideFilter(), and overridePipe() methods respectively.
 					</p>
