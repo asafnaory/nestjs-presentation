@@ -181,15 +181,18 @@
           <p> Task: create a variable and pass it via ConfigModule all the way into the constructor</p>
         </section>
         <section>
-          <p>Steps:</p>
+          <p>Steps: Part 1</p>
           <p>add variable to .env</p>
-          <p>create a config repo with some config file</p>
-          <p>add a default export with registerAs and give it a name </p>
-          <p>add one env variable (foo: process.env.FOO)</p>
-          <p>add ConfigModule to one of the modules</p>
-          <p>add ConfigService to one of the services</p>
-          <p>access the env variable</p>
-          <p>print the env variable in the constructor</p>
+          <p> Add a default export with registerAs and give it a auth </p>
+          <p> Add ConfigModule.forRoot() with schema validations to AppModule </p>
+          <p> Add ConfigModule.forFeature(authConfig) to AuthModule </p>        
+        </section>
+        <section>
+          <p>Steps: Part 2</p>
+          <p> Use process.env to configure JwtModule.register in AuthModule </p>          
+          <p> Inject the configuration key-value in the strategy of the jwt </p>          
+          <p> Use them to configure the Passport class via super </p>          
+          <p> Log them to validate correct values </p>  
         </section>
        </section>
        <section>
@@ -200,7 +203,7 @@
         <section>
           <p>Steps: part 1</p>
           <p>1. Create class WebSocketGateway with namespace "chat" and cors true</p>
-          <p>2. Create SubscribeMessage method that listens to "chatToServer" event and receives sender, room and message and emit that message to all listeners to "chatToClient" in the room received </p>
+          <p>2. Create SubscribeMessage method that listens to "serverMessagesEvent" event and receives sender, room and message as payload and emit that message to all listeners to "clientMessagesEvent" in the room received </p>
           
         </section>
         <section>
