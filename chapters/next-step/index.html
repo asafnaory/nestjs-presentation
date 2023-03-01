@@ -27,10 +27,8 @@
                <section id="fragments">
                 <h4 class="fragment">1. Event Emitter </h4>
                 <h4 class="fragment">2. HTTP module </h4>
-                <h4 class="fragment">3. Lifecycle Events</h4>
-                <h4 class="fragment">4. Recipes </h4>
-                <h4 class="fragment">5. Microservices </h4>
-                <h4 class="fragment">6. GraphQL </h4>
+                <h4 class="fragment">3. Microservices </h4>
+                <h4 class="fragment">4. GraphQL </h4>
                </section>
                <section>
                    <section>
@@ -57,13 +55,22 @@
                         <p>npm i --save @nestjs/axios</p>
                     </section>
                     <section>
-                        <pre><code class="typescript-language" data-trim data-noescape>
-                            @Module({
-                                imports: [HttpModule],
-                                providers: [CatsService],
-                              })
-                              export class CatsModule {}
-                          </code></pre>
+                        <p>To configure the underlying Axios instance, pass an optional options object to the register() method of HttpModule when importing it. This options object will be passed directly to the underlying Axios constructor</p>
+                    </section>
+                    <section>
+                            <pre><code class="typescript-language" data-trim data-noescape>
+                                @Module({
+                                    imports: [
+                                      HttpModule.register({
+                                        timeout: 5000,
+                                        maxRedirects: 5,
+                                      }),
+                                    ],
+                                    providers: [CatsService],
+                                  })
+                                  export class CatsModule {}
+                                  
+                              </code></pre>
                     </section>
                     <section>
                         <p>Next, inject HttpService using normal constructor injection.</p>
@@ -72,55 +79,23 @@
                             export class CatsService {
                               constructor(private readonly httpService: HttpService) {}
                             
-                              findAll(): Observable<AxiosResponse<Cat[]>> {
+                              findAll(): Observable<AxiosResponse<Cat[]> {
                                 return this.httpService.get('http://localhost:3000/cats');
                               }
                             }
                           </code></pre>
                     </section>
                     <section>
-                        <h4>Configuration</h4>
+                        <p>Rxjs</p>
+                        <a href="https://rxjs.dev/">Rxjs Docs</a>
                     </section>
-                    <section>
-                        <p>configure the underlying Axios instance, pass an optional options object to the register() method of HttpModule when importing it. This options object will be passed directly to the underlying Axios constructor.</p>
-                    </section>
-                    <section>
-                        <pre><code class="typescript-language" data-trim data-noescape>
-                            @Module({
-                                imports: [
-                                  HttpModule.register({
-                                    timeout: 5000,
-                                    maxRedirects: 5,
-                                  }),
-                                ],
-                                providers: [CatsService],
-                              })
-                              export class CatsModule {}
-                              
-                          </code></pre>
-                    </section>
-                </section>
-               </section>
-               <section>
-                <section>
-                    <h4>CRUD generator</h4>
-                </section>
-                <section>
-                    <p>Throughout the life span of a project, when we build new features, we often need to add new resources to our application. These resources typically require multiple, repetitive operations that we have to repeat each time we define a new resource.</p>
-                </section>
-                <section>
-                    <p>To help speed up this repetitive process, Nest CLI provides a generator (schematic) that automatically generates all the boilerplate code to help us avoid doing all of this, and make the developer experience much simpler.</p>
-                </section>
-                <section>
-                    <p>nest g resource users</p>
-                </section>
                </section>
                <section>
                 <section>
                     <h4>Microservices</h4>
                 </section>
-                <section>
-                    <p>In Nest, a microservice is fundamentally an application that uses a different transport layer than HTTP</p>
+                <section class="fragments">
+                    <p>In Nest, a microservice is fundamentally an application that uses a different transport layer than HTTP.</p>
                 </section>
                 <section>
                     <img src="../../assets/microservices.png" style="height: 650px; width: 1000px;">
@@ -131,6 +106,98 @@
                 <section>
                     <h4>Demo</h4>
                 </section>
+               </section>
+               <section>
+                <section>
+                    <h4>GraphQL</h4>
+                </section>
+                <section>
+                    <iframe width="1000" height="650" src="https://www.youtube.com/embed/eIQh02xuVw4">
+                    </iframe>
+                </section>
+               </section>
+               <section>
+                <section>
+                    <h4>roundup</h4>
+                </section>
+                <section id="fragments">
+                    <h4>Basics</h4>
+                    <ul>
+                        <li class="fragment">Basic CRUD</li>
+                        <li class="fragment">Data validations</li>
+                        <li class="fragment">Building blocks</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>Prisma</h4>
+                    <ul>
+                        <li class="fragment">What is Prisma</li>
+                        <li class="fragment">How to connect to Prisma</li>
+                        <li class="fragment">How to create models</li>
+                        <li class="fragment">Relationships</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>Authentication</h4>
+                    <ul>
+                        <li class="fragment">Hash password</li>
+                        <li class="fragment">What is JWT</li>
+                        <li class="fragment">Create and return JWT when login using @nestjs/jwt</li>
+                        <li class="fragment">Validate JWT using Passport (strategies)</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>Authorization</h4>
+                    <ul>
+                        <li class="fragment">Create roles Decorator with SetMetadata</li>
+                        <li class="fragment">Mark a handler or class with it</li>
+                        <li class="fragment">Create roles guard validate the role</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>Testing</h4>
+                    <ul>
+                        <li class="fragment">Create TestingModule and inject mocks</li>
+                        <li class="fragment">Unit tests using jest</li>
+                        <li class="fragment">e2e tests using supertest</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>Open API</h4>
+                    <ul>
+                        <li class="fragment">Create TestingModule and inject mocks</li>
+                        <li class="fragment">Unit tests using jest</li>
+                        <li class="fragment">e2e tests using supertest</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>Configuration</h4>
+                    <ul>
+                        <li class="fragment">Using ConfigModule</li>
+                        <li class="fragment">inject ConfigService</li>
+                        <li class="fragment">Use config key and ConfigType for type safety</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>WebSockets</h4>
+                    <ul>
+                        <li class="fragment">How WebSockets work </li>
+                        <li class="fragment">interaction with socket io</li>
+                        <li class="fragment">how to inject WebSocket server</li>
+                        <li class="fragment">how to inject Socket Client</li>
+                    </ul>
+                </section>
+                <section id="fragments">
+                    <h4>Next step</h4>
+                    <ul>
+                        <li class="fragment">Microservices</li>
+                        <li class="fragment">GraphQL</li>
+                        <li class="fragment">And more...</li>
+                    </ul>
+                </section>
+               </section>
+               <section>
+                <h4>Thank you for listening!</h4>
                </section>
 			</div>
 		</div>
