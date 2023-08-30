@@ -121,11 +121,13 @@
         </section>
         <section>
           <p>Steps:</p>
-          <p>1. add Agent model to prisma schema (user) with id, email, password and players array</p>
-          <p>1. Create auth module, controller and service with signup and signin methods</p>
-          <p>3. signup: receives email and password (AuthCredentialsDto) and create agent in the DB with hashed password </p>
-          <p>4. signin: receives email and password (AuthCredentialsDto) and returns "OK" if they are valid</p>
-          <a href="https://www.npmjs.com/package/bcryptjs">Use bcryptjs</a>
+          <p>1. npm install "bcrypt": "^5.1.0" <a href="https://www.npmjs.com/package/bcrypt">bcrypt</a></p>
+          <p>2. add User model to prisma schema with id, email, password</p>
+          <p>3. Create IAM repo with two inner repos - authentication and hashing</p>
+          <p>4. create hashing service with bcrypt</p>
+          <p>5. create auth controller and service with 2 methods - signup and signin</p>
+          <p>6. signup - should save the user to the DB if not exist</p>
+          <p>7. signin - should validate the credentials and return OK if valid</p>
         </section>
        </section>
        <section>
@@ -135,10 +137,10 @@
         </section>
         <section>
           <p>Steps:</p>
-          <p>1. Add JWT module to AuthModule with configurations </p>
-          <p>2. Create JwtStrategy and add it to AuthModule</p>
-          <p>3. Modify signin method in service to return JWT</p>
-          <p>4. Create GetAgent() decorator</p>
+          <p>1. Add JWT module to IAMModule</p>
+          <p>2. Change the return value of signin to be JWT token </p>
+          <p>3. Create AccessTokenGuard that validates the token and return true if the token is valid</p>
+          <p>4. Create GetUser() and Public() decorators</p>
           <a href="https://docs.nestjs.com/security/authentication#jwt-functionality">Nest JWT Docs</a>
         </section>
        </section>
@@ -149,16 +151,9 @@
         </section>
         <section>
           <p>Steps: part 1</p>
-          <p>1. Modify agent schema and add Role with BASIC and Admin</p>
+          <p>1. Modify user schema and add Role with Basic and Admin</p>
           <p>2. Create roles decorator that SetMetadata with some role (for example: Admin).</p>
           <p>3. Create roles guard that checks the class or method roles and the user roles and return true only if they match.</p>
-          <p>4. Create public decorator that SetMetadata with value for isPublic (for setting public routes).</p>
-        </section>
-        <section>
-          <p>Steps: part 2</p>
-          <p>5. Extend AuthGuard and check if the isPublic decorator is attached to some class or method are return true no matter what.</p>
-          <p>6. Move the AuthGuard to main.ts and use is public on signup and signin routes </p>
-          <p>6. Create an "add-to-team" route on player controller and mark it with RolesGuard and the ADMIN role</p>
           <a href="https://docs.nestjs.com/security/authorization">Nest Authorization Docs</a>
         </section>
        </section>
