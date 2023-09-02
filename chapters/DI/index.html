@@ -43,10 +43,10 @@
        </section>
        <section>
          <section id="fragments">
-           <p>Nests DI mechanism has 3 steps:</p>
+           <p>when a provider and the class that uses the provider are in the same module Nests DI mechanism has 3 steps:</p>
            <ul>
-             <li class="fragment">@Injectable(): declare a class that can be managed by the nest container (Ioc or DI container)</li>
-             <li class="fragment">Request the service in the constructor</li>
+             <li class="fragment">@injectable(): declare a class that can be managed by the nest container (Ioc or DI container)</li>
+             <li class="fragment">@inject(): Request the provider in the constructor</li>
              <li class="fragment">Declare the provider in the Module.</li>
             </ul>
           </section>
@@ -61,9 +61,17 @@
         </section>
             <section>
               <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-5 | 3">
+                @Controller('cats')
+                export class CatsController {
+                  constractor(private readonly catsService: CatsService)
+                  // ...
+                }
+              </code></pre>
+              <p class="fragment">synthetic sugar</p>
+              <pre class="fragment"><code class="typescript-language" data-trim data-noescape data-line-numbers="1-5 | 3">
                   @Controller('cats')
                   export class CatsController {
-                    constractor(private readonly catsService: CatsService)
+                    constractor(@Inject(CatsService) private readonly catsService: CatsService)
                     // ...
                   }
               </code></pre>
@@ -82,11 +90,15 @@
             </code></pre>
           </section>
             <section>
-              <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="1-9 | 7">
-                import { Module } from '@nestjs/common';
-                import { CatsController } from './cats.controller';
-                import { CatsService } from './cats.service';
-                
+              <pre><code class="typescript-language" data-trim data-noescape data-line-numbers="3">
+                @Module({
+                  controllers: [CatsController],
+                  providers: [CatsService],
+                })
+                export class CatsModule {}
+              </code></pre>
+              <p class="fragment">synthetic sugar</p>
+              <pre class="fragment"><code class="typescript-language" data-trim data-noescape data-line-numbers="3">
                 @Module({
                   controllers: [CatsController],
                   providers: [{provide: CatsService, useClass: CatsService}],
@@ -100,6 +112,10 @@
             <p class="fragment">then, it either creates an instance or caches one and return it</p>
             <p class="fragment"> all of it happen during application bootstraping </p>
           </section>
+          <section>
+            <h4>Demo!</h4>
+            <p>NEST_DEBUG=true npm run start:dev</p>
+          </section>
         </section>
           <section>
             <section>
@@ -108,6 +124,7 @@
             <section id="fragments">
               <p>All modules encapsulate their services by default.</p>
               <p class="fragment"> so how can we use one module service in another module?</p>
+              <p class="fragment">when a provider and the class that uses the provider are in different modules Nests DI mechanism has an additional 4th step:</p>
             </section>
             <section>
               <pre><code class="typescript-language" data-trim data-noescape>
@@ -308,7 +325,23 @@
          <section>
            <h4>Circular dependency </h4>
           </section>
+          <section>
+            <h4>Demo</h4>
+          </section>
+          <section>
+            <p>npx madge dist/main.js --circular</p>
+          </section>
           <section  id="fragments" data-background-color="white" data-background-iframe="https://docs.nestjs.com/fundamentals/circular-dependency#forward-reference" data-background-interactive></section>
+        </section>
+        <section>
+          <section>
+            <h4>madge</h4>
+          </section>
+          <section  id="fragments" data-background-color="white" data-background-iframe="https://www.npmjs.com/package/madge" data-background-interactive></section>
+          <section>
+            <p>npx madge dist/main.js --image graph.png</p>
+            <p>npx madge dist/main.js --circular --image graph.png</p>
+          </section>
         </section>
         <section>
         <section>
@@ -417,7 +450,7 @@
           </section>
           <section id="fragments">
             <h4>use cases</h4>
-            <p class="fragment">Let's say we need to configure a Provider with data that is defined per request, perhaps with information from the Header of every given request.</p>
+            <p class="fragment">Let's say we need to configure a Provider (e.g database credentials for each user) with data that is defined per request, perhaps with information from the Header of every given request.</p>
           </section>
           <section id="fragments">  
             <p>TRANSIENT</p>
