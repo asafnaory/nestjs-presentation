@@ -160,7 +160,25 @@
        </section>
        <section>
         <section>
-          <h4>Exercise 8 - Testing </h4>
+          <h4>Exercise 8 - Caching </h4>
+          <p> Task: Add Caching using Redis to AccessTokenGuard and getAllPlayers</p>
+        </section>
+        <section>
+          <p>Steps:</p>
+          <p>1. Make sure that you have redis instance available (look in docker compose file) </p>
+          <p>2. Add the CacheModule with proper configurations to app.module</p>
+          <p>3. Add CacheInterceptor to some of the routes (for example getAllPlayers)</p>
+          <p>4. you can monitor Redis by using the "monitor" in redis cli</p>
+        </section>
+        <section>
+          <p>5. call the api and see if the redis instance is logging the response</p>
+          <p>6. go to authentication.service and set the cache (using cacheManager) with key: user.id and value: newUser.role</p>
+          <p>7. go to access-token.guard and get the user role from cache before going to database</p>
+        </section>
+       </section>
+       <section>
+        <section>
+          <h4>Exercise 9 - Testing </h4>
           <p> Task: Tests</p>
         </section>
         <section>
@@ -173,7 +191,7 @@
        </section>
        <section>
         <section>
-          <h4>Exercise 9 - Open api </h4>
+          <h4>Exercise 10 - Open api </h4>
         </section>
         <section>
           <p>1. Download the swagger package from npm</p>
@@ -185,7 +203,7 @@
        </section>
        <section>
         <section>
-          <h4>Exercise 10 - Configuration </h4>
+          <h4>Exercise 11 - Configuration </h4>
           <p> Task: create a variable and pass it via ConfigModule all the way into the constructor</p>
         </section>
         <section>
@@ -205,7 +223,7 @@
        </section>
        <section>
         <section>
-          <h4>Exercise 11 - Websocket </h4>
+          <h4>Exercise 12 - Websocket </h4>
           <p> Task: Create WebSocketGateway for namespace "chat"</p>
         </section>
         <section>
@@ -227,7 +245,7 @@
        </section>
        <section>
         <section>
-          <h4>Exercise 12 - Next Step </h4>
+          <h4>Exercise 13 - Next Step </h4>
         </section>
        </section>
       </div>

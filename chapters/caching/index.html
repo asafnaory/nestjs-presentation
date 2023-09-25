@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="../../dist/reset.css">
+		<link rel="stylesheet" href="../../dist/reveal.css">
+		<link rel="stylesheet" href="../../dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../../plugin/highlight/monokai.css">
+		<style>
+			.reveal {
+				background-color: black
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h4>Caching</h4>
+				</section>
+				<section id="fragments">
+					<p> Caching is a great and simple technique that helps improve your app's performance. </p>
+					<p class="fragment">It acts as a temporary data store providing high performance data access.</p>
+				</section>
+				<section>
+					<section>
+						<h4>Caching pros and cons</h4>
+					</section>
+					<section>
+						<h4>Pros</h4>
+						<p class="fragment">Reduced Load on Database.</p>
+						<p class="fragment">Improved Performance.</p>
+						<p class="fragment">Scalability.</p>
+					</section>
+					<section>
+						<h4>Cons</h4>
+						<p class="fragment">Outdated data.</p>
+						<p class="fragment">Complexity.</p>
+						<p class="fragment">Memory Consumption.</p>
+						<p class="fragment">Security and Privacy Concerns.</p>
+					</section>
+					<section>
+						<h4>When to Use Database Query Caching</h4>
+						<p class="fragment">Read-Heavy Workloads: When read operations significantly outnumber write operations</p>
+						<p class="fragment">Expensive Queries: Queries that are computationally expensive</p>
+						<p class="fragment">Stable Data: Data that does not change frequently</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4>Caching in nest js</h4>
+					</section>
+					<section>
+						<h4>packages</h4>
+						<p> Nest Caching: npm install @nestjs/cache-manager cache-manager </p>
+						<p> Redis: npm install redis@3.1.2 cache-manager-redis-store@2.0.0</p>
+					</section>
+					<section>
+						<h4>In-memory cache (Default)</h4>
+					</section>
+					<section>
+							<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="6">
+								import { Module } from '@nestjs/common';
+								import { CacheModule } from '@nestjs/cache-manager';
+								import { AppController } from './app.controller';
+								
+								@Module({
+								  imports: [CacheModule.register()],
+								  controllers: [AppController],
+								})
+								export class AppModule {}
+										  
+							  </code></pre>
+					</section>
+					<section>
+						<h4>Interacting with the Cache store</h4>
+					</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+						  </code></pre>
+					</section>
+					<section id="fragments">
+						<pre class="fragment"><code class="typescript-language" data-trim data-noescape>
+							const value = await this.cacheManager.get('key');
+						  </code></pre>
+						  <pre class="fragment"><code class="typescript-language" data-trim data-noescape>
+							await this.cacheManager.set('key', 'value');
+						  </code></pre>
+						  <pre class="fragment"><code class="typescript-language" data-trim data-noescape>
+							await this.cacheManager.set('key', 'value', 0);
+						  </code></pre>
+						  <pre class="fragment"><code class="typescript-language" data-trim data-noescape>
+							await this.cacheManager.del('key');
+						  </code></pre>
+						  <pre class="fragment"><code class="typescript-language" data-trim data-noescape>
+							await this.cacheManager.reset();
+						  </code></pre>
+					</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape data-line-numbers="2">
+							@Controller()
+							@UseInterceptors(CacheInterceptor)
+							export class AppController {
+							@Get()
+							findAll(): string[] {
+								return [];
+								}
+							}
+						  </code></pre>
+					</section>
+					<section>
+						<pre><code class="typescript-language" data-trim data-noescape>
+							@Module({
+								imports: [CacheModule.register()],
+								controllers: [AppController],
+								providers: [
+								  {
+									provide: APP_INTERCEPTOR,
+									useClass: CacheInterceptor,
+								  },
+								],
+							  })
+							  export class AppModule {}							  
+						  </code></pre>
+					</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						CacheModule.register({
+							isGlobal: true // you will not need to import CacheModule in other modules,
+							ttl: 5, // seconds
+							max: 10, // maximum number of items in cache
+							});														
+						</code></pre>
+			    </section>
+				<section>
+					<h4>Different stores</h4>
+				</section>
+				<section>
+					<pre><code class="typescript-language" data-trim data-noescape>
+						@Module({
+							imports: [
+							  CacheModule.register<RedisClientOptions>({
+								store: redisStore,
+						  
+								// Store-specific configuration:
+								host: 'localhost',
+								port: 6379,
+							  }),
+							],
+							controllers: [AppController],
+						  })
+						  export class AppModule {}													
+					  </code></pre>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h4>Redis monitor</h4>
+				</section>
+				<section>
+					<p> Go to docker Desktop -> Containers -> click on the running Containers</p>
+					<img src="../../assets/redis-1.png" style="height: 450px; width: 800px;">
+				</section>
+				<section>
+					<p> Go to redis container</p>
+					<img src="../../assets/redis-2.png" style="height: 450px; width: 800px;">
+				</section>
+				<section>
+					<p> Click on CLI</p>
+					<img src="../../assets/redis-3.png" style="height: 450px; width: 800px;">
+				</section>
+				<section>
+					<p> enter redis-cli -> use the monitor command</p>
+					<img src="../../assets/redis-4.png" style="height: 450px; width: 800px;">
+				</section>
+			</section>
+			</div>
+		</div>
+
+		<script src="../../dist/reveal.js"></script>
+		<script src="../../plugin/notes/notes.js"></script>
+		<script src="../../plugin/markdown/markdown.js"></script>
+		<script src="../../plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>

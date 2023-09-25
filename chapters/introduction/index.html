@@ -41,7 +41,10 @@
                 <p class="fragment">6. First exercise </p>
             </section>
             <section>
-                <img src="../../assets/npm-trends.png" style="height: 650px; width: 1000px;">
+                <img src="../../assets/npm-trends-n.png" style="height: 650px; width: 1000px;">
+            </section>
+            <section>
+                <img src="../../assets/npm-trends-express.png" style="height: 650px; width: 1000px;">
             </section>
             <section>
                 <img src="../../assets/nests-twit.png" style="height: 650px; width: 600px;">
@@ -86,26 +89,29 @@
                 <section id="fragments">
                     <p>Modules</p>
                     <p class="fragment"> Each application has at least one module, a root module </p>
-                    <p class="fragment"> We want to emphasize that modules are strongly recommended as an effective way to organize your components </p>
-                    <p class="fragment"> for most applications, the resulting architecture will employ multiple modules, each encapsulating a closely related set of capabilities. </p>
+                    <p class="fragment"> Modules are strongly recommended as an effective way to organize your components </p>
+                    <p class="fragment"> Employ multiple modules, each encapsulating a closely related set of capabilities. </p>
                 </section>
                 <section id="fragments">
                     <p> The @Module() decorator takes a single object whose properties describe the module</p>
                 </section>
                 <section>
-                    <p> providers: the providers that will be instantiated by the Nest injector and that may be shared at least across this module </p>
+                    <p> Providers: the providers that will be instantiated by the Nest injector and that may be shared at least across this module </p>
                 </section>
                 <section>
-                    <p> controllers: the set of controllers defined in this module which have to be instantiated</p>
+                    <p> Controllers: the set of controllers defined in this module which have to be instantiated</p>
                 </section>
                 <section>
-                    <p> imports: the list of imported modules that export the providers which are required in this module </p>
+                    <p> Imports: the list of imported modules that export the providers which are required in this module </p>
                 </section>
                 <section>
-                    <p> exports: the subset of providers that are provided by this module and should be available in other modules which import this module. You can use either the provider itself or just its token (provide value)</p>
+                    <p> Exports: the subset of providers that are provided by this module and should be available in other modules which import this module.</p>
                 </section>
-                <section id="fragments">
-                    <p>Type of modules</p>
+                <section>
+                    <p>Modules can be Feature oriented, Shared, Global, Dynamic and more</p>
+                </section>
+                <!-- <section id="fragments">
+                    <p>Type of modules:</p>
                     <p class="fragment">Feature modules</p>
                     <p class="fragment">Shared modules</p>
                     <p class="fragment">Global modules</p>
@@ -195,7 +201,7 @@
                           }
                         }
                     </code></pre>
-                </section>
+                </section> -->
             </section>
             <section>
                 <section>
@@ -203,8 +209,7 @@
                 </section>
                 <section id="fragments">
                     <p>Controllers are responsible for handling incoming requests and returning responses to the client.</p>
-                    <p class="fragment">A controller's purpose is to receive specific requests for the application. The routing mechanism controls which controller receives which requests. Frequently, each controller has more than one route, and different routes can perform different actions.</p>
-                    <p class="fragment">In order to create a basic controller, we use classes and decorators. Decorators associate classes with required metadata and enable Nest to create a routing map (tie requests to the corresponding controllers).</p>
+                    <p class="fragment">A controller's purpose is to receive specific requests for the application.</p>
                 </section>
                 <section>
                         <img src="../../assets/controller.png" style="height: 500px; width: 1000px;">
@@ -232,7 +237,8 @@
                     <p>Providers</p>
                 </section>
                 <section>
-                    <p>Providers are a fundamental concept in Nest. Many of the basic Nest classes may be treated as a provider – services, repositories, factories, helpers, and so on. The main idea of a provider is that it can be injected as a dependency; this means objects can create various relationships with each other, and the function of "wiring up" instances of objects can largely be delegated to the Nest runtime system.</p>
+                    <p>Anything that can be injected is a provider</p>
+                    <p>Providers are a fundamental concept in Nest: services, repositories, factories, helpers, and so on.</p>
                 </section>
                 <section>
                     <img src="../../assets/providers.png" style="height: 500px; width: 1000px;">
@@ -242,8 +248,8 @@
                 </section>
                 <section id="fragments">
                     <p>A service is the most common use of providers. </p>
-                    <p class="fagment">Every controller has a service</p>
-                    <p class="fagment">All the business logic should be in the service and the controller should stay as lean as possible </p>
+                    <p class="fragment">Every controller has a service</p>
+                    <p class="fragment">All the business logic should be in the service and the controller should stay as lean as possible </p>
                 </section>
                 <section>
                     <pre><code class="typescript-language" data-trim data-noescape>
@@ -267,7 +273,7 @@
                 <section id="fragments">
                     <p>Dependency Injection</p>
                     <ul>
-                        <li>Nest will resolve the catsService by creating and returning an instance of CatsService </li>
+                        <li class="fragment">Nest will resolve the catsService by creating and returning an instance of CatsService </li>
                         <li class="fragment">or return the existing instance if it has already been requested elsewhere </li>
                         <li class="fragment">This dependency is resolved and passed to your controller's constructor </li>
                     </ul>

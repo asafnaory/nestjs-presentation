@@ -52,7 +52,7 @@
 								<li class="fragment">make changes to the request and the response objects.</li>
 								<li class="fragment">end the request-response cycle.</li>
 								<li class="fragment">call the next middleware function in the stack.</li>
-								<li class="fragment"> the current middleware function does not end the request-response cycle, it must call next() to pass control to the next middleware function. Otherwise, the request will be left hanging.</li>
+								<li class="fragment"> the middleware must call next() to pass control to the next middleware function. Otherwise, the request will be left hanging.</li>
 							</ul>
 						</section>
 						<section>
@@ -224,11 +224,12 @@
 						<ul>
 							<li>In addition you may want full control over the exceptions layer</li>
 							<li class="fragment">For example, you may want to add logging</li>
-							<li class="fragment">Exception filters let you control the exact flow of control and the content of the response sent back to the client</li>
+							<li >Exception filters give you control</li>
 						</ul>
 					</section>
-					<section>
-						<p>While the base (built-in) exception filter can automatically handle many cases for you, you may want full control over the exceptions layer. For example, you may want to add logging or use a different JSON schema based on some dynamic factors. Exception filters are designed for exactly this purpose. They let you control the exact flow of control and the content of the response sent back to the client</p>
+					<section id="fragments">
+						<p>For example, you may want to add logging or use a different JSON schema based on some dynamic factors. </p>
+					    <p class="fragment"> Exception filters let you control the exact flow of control and the content of the response sent back to the client</p>
 					</section>
 					<section>
 						<p>http-exceeption.filter.ts</p>
@@ -281,8 +282,8 @@
 						<section id="fragments">
 							<p>Pipes have two typical use cases:</p>
 							<ul>
-								<li class="fragment">1. transformation: transform input data to the desired form (e.g., from string to integer)</li>
-								<li class="fragment">2. validation: evaluate input data and if valid, simply pass it through unchanged; otherwise, throw an exception when the data is incorrect</li>
+								<li class="fragment">Transformation: transform input data to the desired form (e.g., from string to integer)</li>
+								<li class="fragment">Validation: evaluate input data and if valid, simply pass it through unchanged; otherwise, throw an exception when the data is incorrect</li>
 							</ul>
 						</section>
 						<section>
@@ -290,7 +291,7 @@
 						</section>
 						<section id="fragments">
 							<ul>
-								<li class="fragment">Nest interposes a pipe just before a method is invoked, and the pipe receives the arguments destined for the method and operates on them.</li>
+								<li class="fragment">Nest interposes a pipe before a method is invoked, and the pipe receives the arguments destined for the method and operates on them.</li>
 								<li class="fragment">Any transformation or validation operation takes place at that time, after which the route handler is invoked with any (potentially) transformed arguments.</li>
 							</ul>
 						</section>
@@ -355,7 +356,6 @@
 						<ul>
 							<li>Guards determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions)</li>
 						</ul>
-						<p>Guards have a single responsibility. They determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc.) present at run-time. This is often referred to as authorization. Authorization (and its cousin, authentication, with which it usually collaborates) has typically been handled by middleware in traditional Express applications. Middleware is a fine choice for authentication, since things like token validation and attaching properties to the request object are not strongly connected with a particular route context (and its metadata).</p>
 					</section>
 					<section>
 						<img src="../../assets/guards.png" style="height: 350px; width: 800px;">
